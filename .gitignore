@@ -1,0 +1,13 @@
+__pycache__/
+.idea
+.venv/
+venv/
+**/venv/
+**/.venv/
+.vscode/
+dist/
+frontend/node_modules/
+frontend/build/
+frontend/package-lock.json
+credit_card_transactions-ibm_v2.csv
+!.gitkeep
