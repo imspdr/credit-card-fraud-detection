@@ -1,0 +1,29 @@
+upstream IstioIngressGateway {
+  server $ISTIO_IP:$ISTIO_PORT;
+}
+
+upstream Backend {
+  server $BACKEND_IP:$BACKEND_PORT;
+}
+
+server {
+  listen 80;
+  root /usr/share/nginx/html;
+  
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  location /api {
+    proxy_http_version 1.1;
+    rewrite /api/(.*) /$1 break;
+    proxy_pass http://Backend;
+  }
+
+  location /kserve {
+    proxy_set_header Host $http_kserve_host;
+    proxy_http_version 1.1;
+    rewrite /kserve/(.*) /$1 break;
+    proxy_pass http://IstioIngressGateway;
+  }
+}

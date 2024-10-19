@@ -9,5 +9,6 @@ dist/
 frontend/node_modules/
 frontend/build/
 frontend/package-lock.json
-credit_card_transactions-ibm_v2.csv
+python_codes/data/
+python_codes/eda/*.csv
 !.gitkeep
