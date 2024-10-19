@@ -11,4 +11,6 @@ frontend/build/
 frontend/package-lock.json
 python_codes/data/
 python_codes/eda/*.csv
+python_codes/model/results
 !.gitkeep
+/python_codes/model/results/

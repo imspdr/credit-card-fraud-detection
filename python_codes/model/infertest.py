@@ -1,13 +1,9 @@
 import pickle
 import pandas as pd
 import logging
-from python_codes.util import NpEncoder
 from preprocessing import preprocessing
 from add_fraud_one_hot import add_fraud_one_hot
 from sklearn.metrics import classification_report
-
-from generate_distance_info import generate_distance_info
-from trainer.trainer import Trainer
 from sklearn.metrics import f1_score
 
 logging.basicConfig(level=logging.INFO)
