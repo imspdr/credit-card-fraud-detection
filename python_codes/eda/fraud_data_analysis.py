@@ -42,9 +42,8 @@ def analyze_distribution(df):
     data_distributions = []
     for col_name in df.columns:
         col = df[col_name]
-        col_dtype = col.dtype
 
-        if col_dtype in ["int64", "float64"]:
+        if col_name in ["Amount", "Latitude","Longitude","Per Capita Income - Zipcode","Yearly Income - Person","Total Debt","FICO Score","Credit Limit"]:
             col_type = "numeric"
             col = col.apply(lambda v: -1 if np.isnan(v) else v)
         else:
@@ -92,26 +91,34 @@ def analyze_distribution(df):
         })
     return data_distributions
 
-def load_df(initial_df):
-
+def load_df(df):
     user_df = pd.read_csv("../data/processed/processed_user.csv")
-    initial_df = pd.merge(initial_df, user_df, left_on="User", right_index=True, how="left")
+    df = pd.merge(df, user_df, left_on="User", right_index=True, how="left")
 
     card_df = pd.read_csv("../data/processed/processed_card.csv")
-    initial_df = pd.merge(initial_df, card_df, left_on=["User", "Card"], right_on=["User", "CARD INDEX"], how="left")
+    df = pd.merge(df, card_df, left_on=["User", "Card"], right_on=["User", "CARD INDEX"], how="left")
 
     columns_to_drop = [
-        "Merchant Name", "Errors?", "Is Fraud?"
+        "Errors?", "Is Fraud?"
     ]
-    initial_df = initial_df.drop(columns_to_drop, axis=1)
-    initial_df["Time"] = initial_df["Time"].apply(lambda t: t.split(":")[0])
-    initial_df["Amount"] = initial_df["Amount"].apply(lambda amount: amount[1:]).astype(float)
+    df = df.drop(columns_to_drop, axis=1)
+    df["Time"] = df["Time"].apply(lambda t: t.split(":")[0])
+    df["Amount"] = df["Amount"].apply(lambda amount: amount[1:]).astype(float)
 
-    return initial_df
+    return df
 
 
 fraud_df = pd.read_csv("fraud_cases.csv")
-not_fraud_df = pd.read_csv("not_fraud_cases.csv").sample(frac=0.02, random_state=6541)
+not_fraud_chunks = []
+
+chunk_size = 100000
+
+for chunk in tqdm(pd.read_csv("not_fraud_cases.csv", chunksize=chunk_size), desc="reading not fraud data"):
+    # Sample 2% of rows from the current chunk
+    sampled_chunk = chunk.sample(frac=0.02, random_state=6541)
+    not_fraud_chunks.append(sampled_chunk)
+
+not_fraud_df = pd.concat(not_fraud_chunks, ignore_index=True)
 
 print("fraud")
 fraud_data_dist = analyze_distribution(load_df(fraud_df))

@@ -1,12 +1,11 @@
 import pandas as pd
 
 def preprocessing(df: pd.DataFrame) -> pd.DataFrame:
-    columns_to_use = [
-        "User", "Card", "Time", "Amount", "Use Chip", "Merchant State", "MCC"
+    columns_to_drop = [
+        "Merchant City", "Errors?", "Is Fraud?"
     ]
-
     # 0. select columns
-    df = df[columns_to_use]
+    df = df.drop(columns_to_drop, axis=1)
 
     # 1. Time - remove minute
     df.loc[:, "Time"] = df["Time"].apply(lambda t: t.split(":")[0]).astype(int)
@@ -22,6 +21,6 @@ def preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     card_df = pd.read_csv("../data/processed/processed_card.csv")
     card_merged_df = pd.merge(user_merged_df, card_df, left_on=["User", "Card"], right_on=["User", "CARD INDEX"], how="left")
 
-    last_df = card_merged_df.drop(["User", "Card", "CARD INDEX"], axis=1)
+    last_df = card_merged_df.drop(["Year", "Month", "User", "Card", "CARD INDEX"], axis=1)
 
     return last_df

@@ -24,13 +24,14 @@ def get_latitude_longitude_from_zip(zip_code, country="us"):
 
 def calculate_distance(transaction_zip, user_latitude, user_longitude):
     if not transaction_zip or np.isnan(transaction_zip):
-        return 0
+        return 100000
 
     # get latitude and longitude info from transaction zip code
     transaction_latitude, transaction_longitude = get_latitude_longitude_from_zip(int(transaction_zip))
 
     if not (transaction_longitude and transaction_latitude):
-        return 0
+        return 100000
+
     # calculate the gap of values (distance doesn't need to be actual distance
     return abs(transaction_latitude - user_latitude) + abs(transaction_longitude - user_longitude)
 

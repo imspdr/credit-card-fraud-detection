@@ -9,4 +9,12 @@ def add_fraud_one_hot(df: pd.DataFrame) -> pd.DataFrame:
     # 2. Merchant State - Italy one hot encoding
     df.loc[:, "Merchant State = Italy"] = df["Merchant State"].apply(lambda state: 1 if state == "Italy" else 0)
     df = df.drop(["Merchant State"], axis=1)
+
+    # 2. Merchant Name - 1913477460590765860
+    df.loc[:, "Merchant Name = 19134774"] = df["Merchant Name"].apply(lambda state: 1 if state == 1913477460590765860 else 0)
+    df = df.drop(["Merchant Name"], axis=1)
+
+    # 2. MCC - 5311 one hot encoding
+    df.loc[:, "MCC = 5311"] = df["MCC"].apply(lambda state: 1 if state == 5311 else 0)
+    df = df.drop(["MCC"], axis=1)
     return df

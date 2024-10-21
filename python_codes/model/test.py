@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 
 logging.info("load data")
 chunk_size = 100000
-custom_RF = CustomRandomForestClassifier()
+custom_model = CustomRandomForestClassifier()
 train_file = "../data/processed/train_transactions.csv"
 
 for i, df in enumerate(pd.read_csv(train_file, chunksize=chunk_size)):
@@ -25,17 +25,16 @@ for i, df in enumerate(pd.read_csv(train_file, chunksize=chunk_size)):
     # add fraud feature one-hot encoding
     df = add_fraud_one_hot(df)
 
-    # Train with HPO for first iteration
+    # Train
     logging.info(f"train {i}th chunk")
     if i ==0:
-        custom_RF.fit(df.to_numpy(), y, list(df.columns))
+        custom_model.fit(df.to_numpy(), y, list(df.columns))
     else:
-        custom_RF.additive_fit(df.to_numpy(), y)
+        custom_model.additive_fit(df.to_numpy(), y)
 
-fi = custom_RF.feature_importance()
+fi = custom_model.feature_importance()
 
 with open(f"report.json", "w") as f:
     json.dump(fi, f, cls=NpEncoder, indent=4)
-
 with open(f"trained_model.pkl", "wb") as pkl_file:
-    pickle.dump(custom_RF, pkl_file)
+    pickle.dump(custom_model, pkl_file)

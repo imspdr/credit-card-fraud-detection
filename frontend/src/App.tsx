@@ -2,8 +2,9 @@ import { css } from "@emotion/react";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import { Tabs, Tab, Divider } from "@mui/material";
-import DataDistributionChart from "./components/detail/DataDistributionChart";
+import DataDistributionChart from "./components/report/FraudDistributionChart";
 import { useRootStore } from "./store/RootStoreProvider";
+import FraudAnalysis from "./pages/FraudAnalysis";
 
 function App() {
   const rootStore = useRootStore();
@@ -16,12 +17,7 @@ function App() {
         gap: 20px;
       `}
     >
-      <DataDistributionChart width={1000} height={300} dataDistribution={rootStore.fraudDataDist} />
-      <DataDistributionChart
-        width={1000}
-        height={300}
-        dataDistribution={rootStore.notFraudDataDist}
-      />
+      <FraudAnalysis />
     </div>
   );
 }

@@ -1,0 +1,46 @@
+{
+  "top1": {
+    "Amount": 905,
+    "Merchant State = Italy": 273,
+    "Day": 16,
+    "Zip": 87,
+    "Time": 47,
+    "Credit Limit": 5,
+    "Merchant Name = 19134774": 3,
+    "MCC = 5311": 1,
+    "Use Chip = Swipe": 3,
+    "Use Chip = Online": 3
+  },
+  "top2": {
+    "Zip": 222,
+    "Amount": 327,
+    "Day": 165,
+    "Time": 441,
+    "Use Chip = Online": 40,
+    "Merchant Name = 19134774": 32,
+    "Merchant State = Italy": 76,
+    "Credit Limit": 14,
+    "Use Chip = Swipe": 7,
+    "Year PIN last Changed": 9,
+    "Has Chip": 2,
+    "MCC = 5311": 6,
+    "Card Type": 1,
+    "Cards Issued": 1
+  },
+  "top3": {
+    "Time": 414,
+    "Day": 453,
+    "Merchant State = Italy": 33,
+    "MCC = 5311": 26,
+    "Use Chip = Online": 57,
+    "Zip": 174,
+    "Merchant Name = 19134774": 47,
+    "Amount": 59,
+    "Credit Limit": 37,
+    "Year PIN last Changed": 17,
+    "Use Chip = Swipe": 19,
+    "Cards Issued": 3,
+    "Card Type": 2,
+    "Has Chip": 2
+  }
+}
