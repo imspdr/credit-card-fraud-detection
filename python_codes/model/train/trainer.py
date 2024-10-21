@@ -151,7 +151,16 @@ class Trainer:
         temp_best_model.train(X_train, y_train, col_names)
         y_hat = temp_best_model.inference(X_test)
         f1, acc, _ = evaluate_loss(y_test, y_hat)
-        self.best_loss = f1
+        self.best_loss = [
+            {
+                "name": "f1_score",
+                "value": f1
+            },
+            {
+                "name": "accuracy",
+                "value": acc
+            }
+        ]
 
         # save best_model with full data
 

@@ -2,7 +2,7 @@ import pandas as pd
 
 def preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     columns_to_drop = [
-        "Merchant City", "Errors?", "Is Fraud?"
+        "Year", "Month", "Day", "Merchant City", "Errors?", "Is Fraud?"
     ]
     # 0. select columns
     df = df.drop(columns_to_drop, axis=1)
@@ -21,6 +21,6 @@ def preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     card_df = pd.read_csv("../data/processed/processed_card.csv")
     card_merged_df = pd.merge(user_merged_df, card_df, left_on=["User", "Card"], right_on=["User", "CARD INDEX"], how="left")
 
-    last_df = card_merged_df.drop(["Year", "Month", "User", "Card", "CARD INDEX"], axis=1)
+    last_df = card_merged_df.drop(["Longitude", "Latitude", "User", "Card", "CARD INDEX"], axis=1)
 
     return last_df

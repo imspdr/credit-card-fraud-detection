@@ -4,32 +4,8 @@ import json
 from tqdm import tqdm
 from python_codes.util import NpEncoder
 
-
 '''
-STEP 1. save fraud data (Is Fraud? == "Yes")
-'''
-# fraud_rows = []
-#
-# chunk_size = 100000
-# header_flag = True
-# csv_file = "../data/given/credit_card_transactions-ibm_v2.csv"
-# not_froud_file = "not_fraud_cases.csv"
-# for chunk in tqdm(pd.read_csv(csv_file, chunksize=chunk_size), desc="reading train transaction file and get fraud data"):
-#     fraud_chunk = chunk[chunk["Is Fraud?"] == "Yes"]
-#     not_froud_chunk = chunk[chunk["Is Fraud?"] == "No"]
-#     fraud_rows.append(fraud_chunk)
-#
-#     not_froud_chunk.to_csv(
-#         not_froud_file, mode='a', index=False, header=header_flag
-#     )
-#     header_flag = False
-#
-# result = pd.concat(fraud_rows, ignore_index=True)
-#
-# result.to_csv("fraud_cases.csv", index=False)
-
-'''
-STEP 2. distribution analysis of fraud data
+distribution analysis of fraud data
 '''
 def analyze_distribution(df):
     '''
@@ -108,12 +84,12 @@ def load_df(df):
     return df
 
 
-fraud_df = pd.read_csv("fraud_cases.csv")
+fraud_df = pd.read_csv("../data/processed/fraud_cases.csv")
 not_fraud_chunks = []
 
 chunk_size = 100000
 
-for chunk in tqdm(pd.read_csv("not_fraud_cases.csv", chunksize=chunk_size), desc="reading not fraud data"):
+for chunk in tqdm(pd.read_csv("../data/processed/not_fraud_cases.csv", chunksize=chunk_size), desc="reading not fraud data"):
     # Sample 2% of rows from the current chunk
     sampled_chunk = chunk.sample(frac=0.02, random_state=6541)
     not_fraud_chunks.append(sampled_chunk)
