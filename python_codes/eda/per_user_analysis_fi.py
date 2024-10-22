@@ -2,10 +2,12 @@ import pandas as pd
 import numpy as np
 import json
 
+from python_codes.model.train.preprocess_user_card import preprocess_user, preprocess_card
 from python_codes.util import NpEncoder
 from python_codes.model.train.preprocessing import preprocessing
 from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
 from python_codes.model.train.random_forest_classifier import CustomRandomForestClassifier
+from python_codes.model.train.preprocess_user_card import *
 
 '''
 check feature importance of random forest classifier per user.
@@ -37,12 +39,14 @@ report = {
     "top2": {},
     "top3": {}
 }
-user_df = pd.read_csv("../data/processed/processed_user.csv")
-card_df = pd.read_csv("../data/processed/processed_card.csv")
+user_df = preprocess_user(pd.read_csv("../data/processed/sd254_users_with_id.csv"))
+card_df = preprocess_card(pd.read_csv("../data/given/sd254_cards.csv"))
+
+
 
 # read train file chunk by chunk and train simple model for each user data
 for chunk in pd.read_csv(train_file, chunksize=chunk_size):
-    chunk_group = chunk.groupby("User");
+    chunk_group = chunk.groupby(["User", "Card"]);
 
     for i, (user, df) in enumerate(chunk_group):
         print(f"now processing user : {user}")
@@ -78,5 +82,5 @@ for chunk in pd.read_csv(train_file, chunksize=chunk_size):
                     report_now[fi[0]] = 1
 
 
-with open(f"fi_report.json", "w") as f:
+with open(f"fi_report2.json", "w") as f:
     json.dump(report, f, cls=NpEncoder, indent=2)

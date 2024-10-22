@@ -115,7 +115,7 @@ class Trainer:
         k = 6
         logging.info("[trainer] start data division")
         division = []
-        for i in range(k):
+        for i in range(k - 1):
             X_rest, X_part, y_rest, y_part = train_test_split(X, y, test_size=1 / (k - i),  stratify=y)
             division.append([X_part, y_part])
             X = X_rest
@@ -190,6 +190,7 @@ class Trainer:
         logging.info("[trainer] save best model")
         self.best_model = ModelRunner(**self.config_parser.bohb_config2model_runner(self.recorder.best_config))
         self.best_model.train(X, y, col_names)
+        return self.best_model
 
     def report(self):
         return {

@@ -10,9 +10,8 @@ model_dict = {
     "LightGBMClassifier": {
         "class": CustomLightGBMClassifier,
         "params": {
-            "num_leaves": {"type": 1, "min": 32, "max": 1024},
+            "num_leaves": {"type": 1, "min": 32, "max": 256},
             "learning_rate": {"type": 2, "min": 0.01, "max": 0.1},
-            "n_estimators": {"type": 1, "min": 100, "max": 500},
         },
     },
 }

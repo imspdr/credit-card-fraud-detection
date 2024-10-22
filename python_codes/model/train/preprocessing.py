@@ -14,11 +14,11 @@ def preprocessing(df: pd.DataFrame, card_df: pd.DataFrame, user_df: pd.DataFrame
     df.loc[:, "Amount"] = df["Amount"].apply(lambda amount: amount[1:]).astype(float)
 
     # 3. Append user info from User
-    user_merged_df = pd.merge(df, user_df, left_on="User", right_index=True, how="left")
+    user_merged_df = pd.merge(df, user_df, left_on="User", right_on="id", how="left")
 
     # 4. Append Card info from User and Card
     card_merged_df = pd.merge(user_merged_df, card_df, left_on=["User", "Card"], right_on=["User", "CARD INDEX"], how="left")
 
-    last_df = card_merged_df.drop(["User", "Card", "CARD INDEX"], axis=1)
+    last_df = card_merged_df.drop(["User", "Card", "id", "CARD INDEX"], axis=1)
 
     return last_df

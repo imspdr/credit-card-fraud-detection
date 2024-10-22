@@ -1,6 +1,7 @@
 import pickle
 import pandas as pd
 import numpy as np
+from python_codes.model.train.preprocess_user_card import preprocess_user, preprocess_card
 from python_codes.model.train.preprocessing import preprocessing
 from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
 from python_codes.model.train.generate_user_feature import generate_user_feature
@@ -11,9 +12,9 @@ from tqdm import tqdm
 evaluate ensemble model with hold-out dataset (user 1990~)
 '''
 
-df = pd.read_csv("../data/processed/hold_out_transactions.csv")
-user_df = pd.read_csv("../data/processed/processed_user.csv")
-card_df = pd.read_csv("../data/processed/processed_card.csv")
+df = pd.read_csv("../data/processed/eval_data.csv")
+user_df = preprocess_user(pd.read_csv("../data/processed/sd254_users_with_id.csv"))
+card_df = preprocess_card(pd.read_csv("../data/given/sd254_cards.csv"))
 target = "Is Fraud?"
 y_true = df[target].apply(lambda fraud: 1 if fraud == "Yes" else 0).to_numpy()
 result_path = "results/ensemble_train"

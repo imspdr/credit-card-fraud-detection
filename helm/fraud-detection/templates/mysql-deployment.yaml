@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:latest
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "{{ .Values.mysql.password }}"
+        - name: MYSQL_DATABASE
+          value: "{{ .Values.mysql.db }}"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        resources:
+          limits:
+            cpu: {{ .Values.mysql.resources.limits.cpu }}
+            memory: {{ .Values.mysql.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.mysql.resources.requests.cpu }}
+            memory: {{ .Values.mysql.resources.requests.memory }}
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: {{ .Values.namespace }}
+spec:
+  type: NodePort
+  ports:
+    - port: 3306
+      targetPort: 3306
+      nodePort: {{ .Values.mysql.port }}
+  selector:
+    app: mysql
+  externalIPs:
+    - {{ .Values.mysql.ip }}

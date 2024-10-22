@@ -3,6 +3,7 @@ import numpy as np
 import json
 from tqdm import tqdm
 from python_codes.util import NpEncoder
+from python_codes.model.train.preprocess_user_card import *
 
 '''
 distribution analysis of fraud data
@@ -69,14 +70,14 @@ def analyze_distribution(df):
     return data_distributions
 
 def load_df(df):
-    user_df = pd.read_csv("../data/processed/processed_user.csv")
-    df = pd.merge(df, user_df, left_on="User", right_index=True, how="left")
+    user_df = preprocess_user(pd.read_csv("../data/processed/sd254_users_with_id.csv"))
+    df = pd.merge(df, user_df, left_on="User", right_on="id", how="left")
 
-    card_df = pd.read_csv("../data/processed/processed_card.csv")
+    card_df = preprocess_card(pd.read_csv("../data/given/sd254_cards.csv"))
     df = pd.merge(df, card_df, left_on=["User", "Card"], right_on=["User", "CARD INDEX"], how="left")
 
     columns_to_drop = [
-        "Errors?", "Is Fraud?"
+        "Errors?", "Is Fraud?", "User", "Card", "id", "CARD INDEX"
     ]
     df = df.drop(columns_to_drop, axis=1)
     df["Time"] = df["Time"].apply(lambda t: t.split(":")[0])
