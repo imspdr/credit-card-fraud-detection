@@ -9,8 +9,10 @@ dist/
 frontend/node_modules/
 frontend/build/
 frontend/package-lock.json
-python_codes/data/
+python_codes/data/given/*.csv
+python_codes/data/processed/*.csv
 python_codes/eda/*.csv
-python_codes/model/results
+python_codes/eda/*.json
+python_codes/model/results/*
 !.gitkeep
-/python_codes/model/results/
+**/trained_model.pkl

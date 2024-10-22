@@ -1,6 +1,16 @@
 import ConfigSpace as CS
-from .configuration import model_dict
+from python_codes.model.train.light_gbm_classifier import CustomLightGBMClassifier
 
+model_dict = {
+    "LightGBMClassifier": {
+        "class": CustomLightGBMClassifier,
+        "params": {
+            "num_leaves": {"type": 1, "min": 32, "max": 1024},
+            "learning_rate": {"type": 2, "min": 0.01, "max": 0.1},
+            "n_estimators": {"type": 1, "min": 100, "max": 500},
+        },
+    },
+}
 
 class ConfigParser:
     def __init__(self, custom_model=model_dict):

@@ -19,7 +19,7 @@ def analyze_distribution(df):
     for col_name in df.columns:
         col = df[col_name]
 
-        if col_name in ["Amount", "Latitude","Longitude","Per Capita Income - Zipcode","Yearly Income - Person","Total Debt","FICO Score","Credit Limit"]:
+        if col_name in ["Amount", "Per Capita Income - Zipcode","Yearly Income - Person","Total Debt","FICO Score","Credit Limit"]:
             col_type = "numeric"
             col = col.apply(lambda v: -1 if np.isnan(v) else v)
         else:

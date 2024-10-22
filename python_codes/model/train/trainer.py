@@ -7,7 +7,7 @@ from hpbandster.core.worker import Worker
 from .config_parser import ConfigParser
 from .model_runner import ModelRunner
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
+from sklearn.metrics import f1_score, recall_score, confusion_matrix
 
 
 class Recorder:
@@ -26,9 +26,7 @@ class Recorder:
         self.lock.release()
 
 def evaluate_loss(y_test, y_hat):
-    f1 = f1_score(y_test, y_hat, average="weighted")
-    acc = accuracy_score(y_test, y_hat)
-    return f1, acc, (f1 + acc) / 2
+    return recall_score(y_test, y_hat, average="weighted")
 
 def my_confusion_matrix(y_test, y_hat):
     uniques = np.unique(y_hat)
@@ -70,8 +68,8 @@ class MyWorker(Worker):
             now_y_train = np.hstack(now_y_train_list)
             pp.train(now_X_train, now_y_train, self.col_names)
             y_hat = pp.inference(now_X_test)
-            f1, acc, mean = evaluate_loss(now_y_test, y_hat)
-            score.append(1 - mean)
+            f1 = evaluate_loss(now_y_test, y_hat)
+            score.append(1 - f1)
         mean_loss = np.mean(score)
 
         self.recorder.update(mean_loss, config)
@@ -88,19 +86,16 @@ class Trainer:
         self.best_model = None
         self.best_loss = {}
 
-    def train(self, X, y, col_names, n_worker=1, n_iter=20):
+    def train_with_hpo(self, X, y, col_names, n_worker=1, n_iter=20):
         k = 5
         logging.info("[trainer] start data division")
         division = []
-        for i in range(k - 1):
+        for i in range(k):
             X_rest, X_part, y_rest, y_part = train_test_split(X, y, test_size=1 / (k - i),  stratify=y)
             division.append([X_part, y_part])
             X = X_rest
             y = y_rest
         division.append([X, y])
-
-        # HPO using 4 divisions
-        # one division for hold-out
 
         logging.info("[trainer] start name server")
         self.recorder = Recorder()
@@ -108,7 +103,7 @@ class Trainer:
         name_server.start()
         for i in range(n_worker):
             worker = MyWorker(
-                division[:-1],
+                division,
                 col_names=col_names,
                 config_parser=self.config_parser,
                 recorder=self.recorder,
@@ -150,17 +145,8 @@ class Trainer:
         X_test, y_test = division[-1]
         temp_best_model.train(X_train, y_train, col_names)
         y_hat = temp_best_model.inference(X_test)
-        f1, acc, _ = evaluate_loss(y_test, y_hat)
-        self.best_loss = [
-            {
-                "name": "f1_score",
-                "value": f1
-            },
-            {
-                "name": "accuracy",
-                "value": acc
-            }
-        ]
+        loss = evaluate_loss(y_test, y_hat)
+        self.best_loss = loss
 
         # save best_model with full data
 
@@ -171,6 +157,6 @@ class Trainer:
     def report(self):
         return {
             "best_config": self.best_model.get_config(),
-            "evaluate": self.best_loss,
+            "best_loss": self.best_loss,
             "feature_importance": self.best_model.get_model().feature_importance(),
         }

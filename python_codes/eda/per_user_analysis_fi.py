@@ -1,13 +1,14 @@
 import pandas as pd
 import numpy as np
 import json
+
 from python_codes.util import NpEncoder
-from python_codes.model.preprocessing import preprocessing
-from python_codes.model.add_fraud_one_hot import add_fraud_one_hot
-from python_codes.model.random_forest_classifier import CustomRandomForestClassifier
+from python_codes.model.train.preprocessing import preprocessing
+from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
+from python_codes.model.train.random_forest_classifier import CustomRandomForestClassifier
 
 chunk_size = 100000
-train_file = "../data/given/credit_card_transactions-ibm_v2.csv"
+train_file = "../data/processed/train_transactions.csv"
 
 temp_df = None
 
@@ -30,6 +31,9 @@ report = {
     "top2": {},
     "top3": {}
 }
+user_df = pd.read_csv("../data/processed/processed_user.csv")
+card_df = pd.read_csv("../data/processed/processed_card.csv")
+
 for chunk in pd.read_csv(train_file, chunksize=chunk_size):
     chunk_group = chunk.groupby("User");
 
@@ -46,18 +50,16 @@ for chunk in pd.read_csv(train_file, chunksize=chunk_size):
         target="Is Fraud?"
         y = df[target].apply(lambda fraud: 1 if fraud == "Yes" else 0).to_numpy()
 
-        # preprocessing
-        df = preprocessing(df)
-
-        # add fraud feature one-hot encoding
+        df = preprocessing(df, card_df, user_df)
         df = add_fraud_one_hot(df)
+        df = df.drop(["City", "Merchant City"], axis=1)
 
         # Train
-        trainer = CustomRandomForestClassifier(n_estimators=100)
-        trainer.fit(df.to_numpy(), y, list(df.columns))
+        model = CustomRandomForestClassifier(n_estimators=100)
+        model.fit(df.to_numpy(), y, list(df.columns))
 
         # save info
-        top_fi = get_top3_importance(trainer.feature_importance())
+        top_fi = get_top3_importance(model.feature_importance())
         if top_fi and len(top_fi) > 2:
             print(f"report appended for user {user}")
             for k, fi in enumerate(top_fi):

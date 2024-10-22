@@ -9,12 +9,14 @@ USER FEATURES
 
 user_df = pd.read_csv("../data/given/sd254_users.csv")
 
+user_columns_to_drop = ["Person", "Retirement Age","Birth Year","Birth Month","Address","Apartment","State","Zipcode","Latitude","Longitude"]
+
 user_columns_to_use = [
     "Current Age", "Gender", "Zipcode", "Latitude", "Longitude", "Per Capita Income - Zipcode", "Yearly Income - Person", "Total Debt", "FICO Score", "Num Credit Cards"
 ]
 
 # 0. select column
-user_df = user_df[user_columns_to_use]
+user_df = user_df.drop(user_columns_to_drop, axis=1)
 
 # 1. Gender to int (male = 1, female = 0)
 user_df["Gender"] = user_df["Gender"].apply(lambda male: 1 if male == "Male" else 0)
@@ -34,12 +36,10 @@ CARD FEATURES
 '''
 card_df = pd.read_csv("../data/given/sd254_cards.csv")
 
-card_columns_to_use = [
-    "User", "CARD INDEX", "Card Type", "Has Chip", "Cards Issued", "Credit Limit", "Year PIN last Changed"
-]
+card_columns_to_drop = ["Card Brand", "Card Number", "Expires", "CVV", "Acct Open Date", "Card on Dark Web"]
 
 # 0. select column
-card_df = card_df[card_columns_to_use]
+card_df = card_df.drop(card_columns_to_drop, axis=1)
 
 # 1. Card Type to int (Credit = 1 , Debit = 0)
 card_df["Card Type"] = card_df["Card Type"].apply(lambda card_type: 1 if card_type == "Credit" else 0)
