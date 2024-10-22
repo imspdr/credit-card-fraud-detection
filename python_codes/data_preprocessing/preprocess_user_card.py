@@ -1,7 +1,9 @@
 import pandas as pd
 import logging
 
-logging.basicConfig(level=logging.INFO)
+'''
+select and preprocessing user and card feature
+'''
 
 '''
 USER FEATURES
@@ -9,11 +11,8 @@ USER FEATURES
 
 user_df = pd.read_csv("../data/given/sd254_users.csv")
 
-user_columns_to_drop = ["Person", "Retirement Age","Birth Year","Birth Month","Address","Apartment","State","Zipcode","Latitude","Longitude"]
-
-user_columns_to_use = [
-    "Current Age", "Gender", "Zipcode", "Latitude", "Longitude", "Per Capita Income - Zipcode", "Yearly Income - Person", "Total Debt", "FICO Score", "Num Credit Cards"
-]
+# Columns to drop. do not use personal info. and remove spatial info except City
+user_columns_to_drop = ["Person", "Retirement Age", "Birth Year", "Birth Month", "Address", "Apartment", "State", "Zipcode", "Latitude", "Longitude"]
 
 # 0. select column
 user_df = user_df.drop(user_columns_to_drop, axis=1)
@@ -36,6 +35,7 @@ CARD FEATURES
 '''
 card_df = pd.read_csv("../data/given/sd254_cards.csv")
 
+# Columns to drop. drop card specific infos and "Card on Dark Web" because it has all false
 card_columns_to_drop = ["Card Brand", "Card Number", "Expires", "CVV", "Acct Open Date", "Card on Dark Web"]
 
 # 0. select column

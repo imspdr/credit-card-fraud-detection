@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# shuffle using linux command
+
 file_path="../data/processed"
 
 echo "$file_path/not_fraud_cases.csv"

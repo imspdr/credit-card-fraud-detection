@@ -1,6 +1,11 @@
 import ConfigSpace as CS
 from python_codes.model.train.light_gbm_classifier import CustomLightGBMClassifier
 
+'''
+config generator for BOHB
+'''
+
+# config space dictionary
 model_dict = {
     "LightGBMClassifier": {
         "class": CustomLightGBMClassifier,
@@ -16,6 +21,7 @@ class ConfigParser:
     def __init__(self, custom_model=model_dict):
         self.custom_model = custom_model
 
+    # build config space from given model dict
     def build_bohb_config(self):
         config_space = CS.ConfigurationSpace()
         hp = CS.CategoricalHyperparameter("model", list(self.custom_model.keys()))
@@ -42,6 +48,7 @@ class ConfigParser:
 
         return config_space
 
+    # convert given config space params to dictionary for model runner
     def bohb_config2model_runner(self, conf):
         pipe_param = {}
         pipe_param["params"] = {}

@@ -1,8 +1,9 @@
-from pyexpat import features
-
 import lightgbm as lgb
 import numpy as np
 
+'''
+custom light gbm classifier for bohb optimization trainer
+'''
 
 class CustomLightGBMClassifier:
     def __init__(self, **kwargs):

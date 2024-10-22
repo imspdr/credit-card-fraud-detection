@@ -7,6 +7,7 @@ from python_codes.util import NpEncoder
 '''
 distribution analysis of fraud data
 '''
+
 def analyze_distribution(df):
     '''
     :param df: pandas dataframe
@@ -103,7 +104,6 @@ with open("fraud_data_dist.json", "w") as f:
 
 print("not_fraud")
 not_fraud_data_dist = analyze_distribution(load_df(not_fraud_df))
-
 with open("not_fraud_data_dist.json", "w") as f:
     json.dump(not_fraud_data_dist, f, cls=NpEncoder, indent=4)
 

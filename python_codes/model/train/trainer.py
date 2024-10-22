@@ -9,6 +9,22 @@ from .model_runner import ModelRunner
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, recall_score, confusion_matrix
 
+'''
+Traner using BOHB optimization module
+
+Recorder : record result from each worker and track best config & loss
+Worker : run train and evaluating for each iteration of bayesian optimization
+Trainer : run bohb optimization and deal informations
+'''
+
+
+def evaluate_loss(y_test, y_hat):
+    return recall_score(y_test, y_hat, average="weighted")
+
+def my_confusion_matrix(y_test, y_hat):
+    uniques = np.unique(y_hat)
+    class_value = confusion_matrix(y_test, y_hat, labels=uniques)
+    return class_value, uniques
 
 class Recorder:
     def __init__(self):
@@ -25,13 +41,6 @@ class Recorder:
             self.best_config = config
         self.lock.release()
 
-def evaluate_loss(y_test, y_hat):
-    return recall_score(y_test, y_hat, average="weighted")
-
-def my_confusion_matrix(y_test, y_hat):
-    uniques = np.unique(y_hat)
-    class_value = confusion_matrix(y_test, y_hat, labels=uniques)
-    return class_value, uniques
 
 
 class MyWorker(Worker):
@@ -43,6 +52,7 @@ class MyWorker(Worker):
         self.recorder = recorder
 
     def compute(self, config, budget, **kwargs):
+        # load model runner with given config
         try:
             pp = ModelRunner(**self.config_parser.bohb_config2model_runner(config))
             k = len(self.division)
@@ -53,7 +63,8 @@ class MyWorker(Worker):
                 "loss": -1,
                 "info": {"config": config, "budget": budget},
             }
-        # try:
+
+        # k-fold cross validation
         score = []
         for i in range(k):
             now_X_test = self.division[i][0]
@@ -87,7 +98,21 @@ class Trainer:
         self.best_loss = {}
 
     def train_with_hpo(self, X, y, col_names, n_worker=1, n_iter=20):
-        k = 5
+        '''
+        :param X: input (numpy ndarray)
+        :param y: output (numpy ndarray)
+        :param col_names: (list of string)
+        :param n_worker: (int)
+        :param n_iter: (int)
+        :return: void
+        '''
+
+        '''
+        STEP 1. data division
+        '''
+        # divide data to 6
+        # one for hold out and use 5 partition for 5-fold cross validation
+        k = 6
         logging.info("[trainer] start data division")
         division = []
         for i in range(k):
@@ -97,13 +122,16 @@ class Trainer:
             y = y_rest
         division.append([X, y])
 
+        '''
+        STEP 2. Bayesian optimization
+        '''
         logging.info("[trainer] start name server")
         self.recorder = Recorder()
         name_server = hpns.NameServer(run_id="trainer", host="127.0.0.1", port=None)
         name_server.start()
         for i in range(n_worker):
             worker = MyWorker(
-                division,
+                division[:-1],
                 col_names=col_names,
                 config_parser=self.config_parser,
                 recorder=self.recorder,
@@ -117,6 +145,8 @@ class Trainer:
         configspace = self.config_parser.build_bohb_config()
 
         logging.info("[trainer] start bohb")
+
+        # set both budget 1.0 to use only bayesian optimization
         bohb = BOHB(
             configspace=configspace,
             run_id="trainer",
@@ -131,10 +161,15 @@ class Trainer:
         logging.info("[trainer] train end")
         logging.info("[trainer] evaluate model with hold-out set")
 
-        # first evaluate model with hold-out
+        '''
+        STEP 3. Evaluate best model
+        '''
+        # load best model
         temp_best_model = ModelRunner(
             **self.config_parser.bohb_config2model_runner(self.recorder.best_config)
         )
+
+        # train with full data (5 division) and evaluate it for hold out
         X_train_list = []
         y_train_list = []
         for i in range(k - 1):
@@ -148,8 +183,10 @@ class Trainer:
         loss = evaluate_loss(y_test, y_hat)
         self.best_loss = loss
 
-        # save best_model with full data
-
+        '''
+        STEP 4. save & train with full data
+        '''
+        # train with full data and save model
         logging.info("[trainer] save best model")
         self.best_model = ModelRunner(**self.config_parser.bohb_config2model_runner(self.recorder.best_config))
         self.best_model.train(X, y, col_names)

@@ -2,28 +2,40 @@ import pandas as pd
 import json
 import pickle
 import os
+from tqdm import tqdm
 from python_codes.util import NpEncoder
 from python_codes.model.train.preprocessing import preprocessing
 from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
+from python_codes.model.train.generate_user_feature import generate_user_feature
 from python_codes.model.train.random_forest_classifier import CustomRandomForestClassifier
 
-
+'''
+Train random forest with full data
+load train data chunk by chunk and do additive train
+'''
 chunk_size = 100000
 custom_model = CustomRandomForestClassifier()
 train_file = "../data/processed/train_transactions.csv"
 result_path = "results/full_train"
+user_df = pd.read_csv("../data/processed/processed_user.csv")
+card_df = pd.read_csv("../data/processed/processed_card.csv")
 os.makedirs(result_path, exist_ok=True)
 
-
-for i, df in enumerate(pd.read_csv(train_file, chunksize=chunk_size)):
+# train
+for i, df in tqdm(enumerate(pd.read_csv(train_file, chunksize=chunk_size)), desc="training rf"):
     # select y
     target="Is Fraud?"
     y = df[target].apply(lambda fraud: 1 if fraud == "Yes" else 0).to_numpy()
 
-    print(f"training {i}th chunk")
-    df = preprocessing(df)
+    # preprocessing
+    df = preprocessing(df, card_df, user_df)
     df = add_fraud_one_hot(df)
-    custom_model.fit(df.to_numpy(), y, list(df.columns))
+    df = generate_user_feature(df)
+
+    if i == 0:
+        custom_model.fit(df.to_numpy(), y, list(df.columns))
+    else:
+        custom_model.additive_fit(df.to_numpy(), y)
 
 fi = custom_model.feature_importance()
 

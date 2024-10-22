@@ -12,14 +12,23 @@ from python_codes.model.train.trainer import Trainer
 
 logging.basicConfig(level=logging.INFO)
 
+'''
+train ensemble model
+
+using lightGBM model with bayesian optimization 
+train each model with near 30000 rows fraud data and 100000 rows from shuffled not fraud data
+'''
+
 logging.info("load data")
 chunk_size = 100000
 not_fraud_file = "../data/processed/shuffled_not_fraud_cases.csv"
 fraud_df = pd.read_csv("../data/processed/fraud_cases.csv")
 user_df = pd.read_csv("../data/processed/processed_user.csv")
 card_df = pd.read_csv("../data/processed/processed_card.csv")
+
 ensemble = []
 whole_report = []
+
 result_path = "results/ensemble_train"
 os.makedirs(result_path, exist_ok=True)
 
@@ -37,13 +46,11 @@ for i, df in enumerate(pd.read_csv(not_fraud_file, chunksize=chunk_size)):
 
     # Train
     logging.info(f"train {i}th chunk")
-
     trainer = Trainer()
     now_model = trainer.train_with_hpo(df.to_numpy(), y, list(df.columns), n_iter=10)
     report = trainer.report()
 
     ensemble.append(now_model)
-
     whole_report.append({
         "index": i,
         "data": report

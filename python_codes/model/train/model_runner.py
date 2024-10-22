@@ -1,7 +1,8 @@
+'''
+model interface for bohb optimization & config space
+'''
+
 class ModelRunner:
-    '''
-    Bohb configuration 정보로부터 모델 생성
-    '''
     def __init__(self, **conf):
         self.configuration = conf
         self.col_names = None

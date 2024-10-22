@@ -1,6 +1,10 @@
 import pandas as pd
 from tqdm import tqdm
 
+'''
+load train transaction data chunk by chunk and split fraud data and not fraud data.
+'''
+
 fraud_rows = []
 
 chunk_size = 100000

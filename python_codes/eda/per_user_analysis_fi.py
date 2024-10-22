@@ -7,6 +7,11 @@ from python_codes.model.train.preprocessing import preprocessing
 from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
 from python_codes.model.train.random_forest_classifier import CustomRandomForestClassifier
 
+'''
+check feature importance of random forest classifier per user.
+to find which column is important for representing fraud case.
+'''
+
 chunk_size = 100000
 train_file = "../data/processed/train_transactions.csv"
 
@@ -26,6 +31,7 @@ def get_top3_importance(feature_importance):
     return list(map(lambda tv: (feature_importance["label"][tv[0]], feature_importance["value"][tv[0]]), top_values))
 
 
+# load data
 report = {
     "top1": {},
     "top2": {},
@@ -34,6 +40,7 @@ report = {
 user_df = pd.read_csv("../data/processed/processed_user.csv")
 card_df = pd.read_csv("../data/processed/processed_card.csv")
 
+# read train file chunk by chunk and train simple model for each user data
 for chunk in pd.read_csv(train_file, chunksize=chunk_size):
     chunk_group = chunk.groupby("User");
 
@@ -50,6 +57,7 @@ for chunk in pd.read_csv(train_file, chunksize=chunk_size):
         target="Is Fraud?"
         y = df[target].apply(lambda fraud: 1 if fraud == "Yes" else 0).to_numpy()
 
+        # preprocessing data
         df = preprocessing(df, card_df, user_df)
         df = add_fraud_one_hot(df)
         df = df.drop(["City", "Merchant City"], axis=1)

@@ -1,5 +1,10 @@
 from sklearn.ensemble import RandomForestClassifier
 
+'''
+custom random forest classifier 
+implement additive training by extending estimators for full train near 24million rows data
+'''
+
 class CustomRandomForestClassifier:
     def __init__(self, n_estimators=20, max_features=0.8):
         self.name = "RandomForestClassifier"
