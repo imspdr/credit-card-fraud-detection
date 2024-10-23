@@ -1,5 +1,5 @@
 import ConfigSpace as CS
-from python_codes.model.train.light_gbm_classifier import CustomLightGBMClassifier
+from .light_gbm_classifier import CustomLightGBMClassifier
 
 '''
 config generator for BOHB

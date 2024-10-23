@@ -1,10 +1,10 @@
 import pickle
 import pandas as pd
 import numpy as np
-from python_codes.model.train.preprocess_user_card import preprocess_user, preprocess_card
-from python_codes.model.train.preprocessing import preprocessing
-from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
-from python_codes.model.train.generate_user_feature import generate_user_feature
+from train.preprocess_user_card import preprocess_user, preprocess_card
+from train.preprocessing import preprocessing
+from train.add_fraud_one_hot import add_fraud_one_hot
+from train.generate_user_feature import generate_user_feature
 from sklearn.metrics import classification_report, f1_score, recall_score, precision_score
 from tqdm import tqdm
 

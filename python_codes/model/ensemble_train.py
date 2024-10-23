@@ -5,11 +5,11 @@ import pickle
 import os
 
 from python_codes.util import NpEncoder
-from python_codes.model.train.preprocess_user_card import preprocess_user, preprocess_card
-from python_codes.model.train.generate_user_feature import generate_user_feature
-from python_codes.model.train.preprocessing import preprocessing
-from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
-from python_codes.model.train.trainer import Trainer
+from train.preprocess_user_card import preprocess_user, preprocess_card
+from train.generate_user_feature import generate_user_feature
+from train.preprocessing import preprocessing
+from train.add_fraud_one_hot import add_fraud_one_hot
+from train.trainer import Trainer
 
 logging.basicConfig(level=logging.INFO)
 

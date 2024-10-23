@@ -55,16 +55,9 @@ class FraudServing(kserve.Model):
 
     def predict(self, payload: Dict, headers: Dict[str, str] = None) -> Dict:
         try:
-            given_data = payload["instances"]
-        except KeyError:
-            return {
-                "predictions": []
-            }
-
-        try:
-            df = pd.DataFrame(given_data["transaction"])
-            user_df = preprocess_user(pd.DataFrame(given_data["user"]))
-            card_df = preprocess_card(pd.DataFrame(given_data["card"]))
+            df = pd.DataFrame(payload["transaction"])
+            user_df = preprocess_user(pd.DataFrame(payload["user"]))
+            card_df = preprocess_card(pd.DataFrame(payload["card"]))
 
             df = preprocessing(df, card_df, user_df)
             df = add_fraud_one_hot(df)

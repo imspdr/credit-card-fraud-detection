@@ -1,9 +1,9 @@
 import pickle
 import pandas as pd
-from python_codes.model.train.preprocess_user_card import preprocess_user, preprocess_card
-from python_codes.model.train.preprocessing import preprocessing
-from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
-from python_codes.model.train.generate_user_feature import generate_user_feature
+from train.preprocess_user_card import preprocess_user, preprocess_card
+from train.preprocessing import preprocessing
+from train.add_fraud_one_hot import add_fraud_one_hot
+from train.generate_user_feature import generate_user_feature
 from sklearn.metrics import classification_report
 from sklearn.metrics import f1_score
 

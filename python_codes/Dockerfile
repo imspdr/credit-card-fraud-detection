@@ -7,8 +7,8 @@ RUN pip install -r /root/requirements.txt
 
 ADD model/results/ensemble_train/ensemble_model.pkl /root/ensemble_model.pkl
 ADD model/train /root/model/train
-ADD fraud_serving_model /root/fraud_serving_model.py
+ADD fraud_model_serving.py /root/fraud_model_serving.py
 
 WORKDIR /root
 
-ENTRYPOINT ["python3", "bert_serving.py"]
+ENTRYPOINT ["python3", "fraud_model_serving.py"]

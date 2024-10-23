@@ -37,7 +37,15 @@ mysql:
       cpu: 100m
       memory: 500Mi
   ip: 192.168.49.2
-  port: 30007
+  port: 30006
   user: root
   password: root
-  db: rain
+  db: fraud
+serving:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 500Mi
+    requests:
+      cpu: 200m
+      memory: 500Mi

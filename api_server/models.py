@@ -1,35 +1,56 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, LargeBinary, ForeignKey
-from sqlalchemy.sql import func
+from sqlalchemy import Column, Integer, String, Float, PrimaryKeyConstraint
 
-from .db import Base
+from db import Base
 
 
-class RainTrain(Base):
-    __tablename__ = 'rain_trains'
+class User(Base):
+    __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False)
-    cpu_size = Column(String(50), nullable=False, default="1000m")
-    memory_size = Column(String(50), nullable=False, default="1Gi")
-    start_day = Column(String(50), nullable=False)
-    end_day = Column(String(50), nullable=False)
-    created_at = Column(DateTime, nullable=False, default=func.now())
-    finished_at = Column(DateTime, nullable=True, default=None)
+    id = Column(Integer, nullable=False, primary_key=True, autoincrement=False)
+    person = Column(String(50), nullable=False)
+    current_age = Column(Integer, nullable=False)
+    retirement_age = Column(Integer, nullable=False)
+    birth_year = Column(Integer, nullable=False)
+    birth_month = Column(Integer, nullable=False)
+    gender = Column(String(10), nullable=False)
+    address = Column(String(100), nullable=False)
+    apartment = Column(String(50), nullable=False)
+    city = Column(String(100), nullable=False)
+    state = Column(String(50), nullable=False)
+    zipcode = Column(String(20), nullable=False)
+    latitude = Column(Float, nullable=False)
+    longitude = Column(Float, nullable=False)
+    per_capita_income_1_zipcode = Column(String(100), nullable=False)
+    yearly_income_1_person = Column(String(100), nullable=False)
+    total_debt = Column(String(100), nullable=False)
+    fico_score = Column(Integer, nullable=False)
+    num_credit_cards = Column(Integer, nullable=False)
 
-    status = Column(String(255), nullable=False, default="creating")
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
-    def __repr__(self):
-        return f"<Train(id={self.id}, name={self.name}, created_at={self.created_at})>"
+class Card(Base):
+    __tablename__ = "cards"
 
-class RainTrainedModel(Base):
-    __tablename__ = 'rain_trained_models'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    train_name = Column(String(50), nullable=False)
-    name = Column(String(50), nullable=False)
-    data_distribution = Column(Text, nullable=False)
-    trained_model_info = Column(Text, nullable=False)
-    trained_model_pkl = Column(LargeBinary(length=(2**32)-1), nullable=True)
-    deployed = Column(String(50), nullable=False, default="false")
+    user = Column(Integer, nullable=False)
+    card_index = Column(Integer, nullable=False)
+    card_brand = Column(String(50), nullable=False)
+    card_type = Column(String(50), nullable=False)
+    card_number = Column(String(50), nullable=False)
+    expires = Column(String(10), nullable=False)
+    cvv = Column(String(10), nullable=False)
+    has_chip = Column(String(100), nullable=False)
+    cards_issued = Column(Integer, nullable=False)
+    credit_limit = Column(String(50), nullable=False)
+    acct_open_date = Column(String(100), nullable=False)
+    year_pin_last_changed = Column(String(10), nullable=False)
+    card_on_dark_web = Column(String(10), nullable=False)
 
-    def __repr__(self):
-        return f"<TrainedModel(id={self.id}, name={self.name})>"
+    __table_args__ = (
+        PrimaryKeyConstraint("user", "card_index", name="pk_user_card_index"),
+    )
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)

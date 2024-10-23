@@ -4,11 +4,11 @@ import pickle
 import os
 from tqdm import tqdm
 from python_codes.util import NpEncoder
-from python_codes.model.train.preprocessing import preprocessing
-from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
-from python_codes.model.train.generate_user_feature import generate_user_feature
-from python_codes.model.train.random_forest_classifier import CustomRandomForestClassifier
-from python_codes.model.train.preprocess_user_card import preprocess_user, preprocess_card
+from train.preprocessing import preprocessing
+from train.add_fraud_one_hot import add_fraud_one_hot
+from train.generate_user_feature import generate_user_feature
+from train.random_forest_classifier import CustomRandomForestClassifier
+from train.preprocess_user_card import preprocess_user, preprocess_card
 
 '''
 Train random forest with full data

@@ -1,10 +1,14 @@
 FROM python:3.10
 
 WORKDIR /root
+ADD sd254_cards.csv /root
+ADD sd254_users_with_id.csv /root
+
 ADD requirements.txt /root
 RUN pip install -r requirements.txt
 
-ADD infra /root/infra
+ADD db.py /root
+ADD models.py /root
 ADD main.py /root
 
 EXPOSE 8000
