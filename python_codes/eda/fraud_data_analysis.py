@@ -1,8 +1,7 @@
-import pandas as pd
 import numpy as np
 import json
 from tqdm import tqdm
-from python_codes.util import NpEncoder
+from python_codes.model.train.util import NpEncoder
 from python_codes.model.train.preprocess_user_card import *
 
 '''

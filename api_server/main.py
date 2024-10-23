@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Depends
 import httpx
+from typing import List, Dict, Any
 from sqlalchemy.orm import Session
 from models import *
 from db import *
@@ -32,8 +33,8 @@ async def lifespan(app: FastAPI):
     yield
 
     print("shutting down server. drop user, card table")
-    User.__table__.drop(engine)
-    Card.__table__.drop(engine)
+    # User.__table__.drop(engine)
+    # Card.__table__.drop(engine)
 
 app = FastAPI(lifespan=lifespan)
 
@@ -44,14 +45,34 @@ HEADERS = {
     "Host": "fraud-detection-serving.default.example.com",
     "Content-Type": "application/json",
 }
+
+
 @app.post("/inference/")
-async def inference_api(request: Request):
-
+async def inference_api(request_data: List[Dict[str, Any]], db: Session = Depends(get_db)):
     try:
-        request_data = await request.json()
+        user_info_list = []
+        card_info_list = []
+        user_cache = []
+        card_cache = []
+        for item in request_data:
+            user_id = item["User"]
+            card_id = item["Card"]
+            user_info, card_info = fetch_data_from_db(db, user_id, card_id)
+            if not user_id in user_cache:
+                user_info_list.append(user_info)
+                user_cache.append(user_id)
+            if not (user_id, card_id) in card_cache:
+                card_info_list.append(card_info)
+                card_cache.append((user_id, card_id))
 
+        payload = {
+            "instances": [],
+            "user": user_info_list,
+            "card": card_info_list,
+            "transaction": request_data
+        }
         async with httpx.AsyncClient() as client:
-            response = await client.post(EXTERNAL_URL, json=request_data, headers=HEADERS)
+            response = await client.post(EXTERNAL_URL, json=payload, headers=HEADERS)
 
         response.raise_for_status()
 
@@ -63,6 +84,24 @@ async def inference_api(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
+def fetch_data_from_db(db: Session, user_id: int, card_id: int):
+    selected_user = db.query(User).filter(User.id == user_id).first()
+    selected_card = db.query(Card).filter(Card.user == user_id, Card.card_index == card_id).first()
+
+    if not selected_user or not selected_card:
+        raise HTTPException(status_code=404, detail="User or Card not found")
+
+    selected_user = vars(selected_user)
+    selected_card = vars(selected_card)
+    user_info = {}
+    for key, value in user_mapper.items():
+        user_info[value] = selected_user[key]
+
+    card_info = {}
+    for key, value in card_mapper.items():
+        card_info[value] = selected_card[key]
+
+    return user_info, card_info
 
 def load_user_to_db():
     global user_mapper

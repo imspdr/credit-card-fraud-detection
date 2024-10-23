@@ -4,7 +4,7 @@ import json
 import pickle
 import os
 
-from python_codes.util import NpEncoder
+from train.util import NpEncoder
 from train.preprocess_user_card import preprocess_user, preprocess_card
 from train.generate_user_feature import generate_user_feature
 from train.preprocessing import preprocessing

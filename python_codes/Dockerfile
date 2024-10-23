@@ -6,7 +6,7 @@ ADD requirements.txt /root/requirements.txt
 RUN pip install -r /root/requirements.txt
 
 ADD model/results/ensemble_train/ensemble_model.pkl /root/ensemble_model.pkl
-ADD model/train /root/model/train
+ADD model/train /root/train
 ADD fraud_model_serving.py /root/fraud_model_serving.py
 
 WORKDIR /root

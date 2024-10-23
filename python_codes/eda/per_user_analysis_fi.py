@@ -1,9 +1,7 @@
-import pandas as pd
 import numpy as np
 import json
 
-from python_codes.model.train.preprocess_user_card import preprocess_user, preprocess_card
-from python_codes.util import NpEncoder
+from python_codes.model.train.util import NpEncoder
 from python_codes.model.train.preprocessing import preprocessing
 from python_codes.model.train.add_fraud_one_hot import add_fraud_one_hot
 from python_codes.model.train.random_forest_classifier import CustomRandomForestClassifier
