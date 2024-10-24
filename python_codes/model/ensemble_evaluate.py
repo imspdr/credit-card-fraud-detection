@@ -43,8 +43,8 @@ mean_y_hat = np.mean(y_hats_array, axis=0)
 for threshold in range(1, 10):
     final_result = (mean_y_hat >= threshold / 10).astype(int)
     f1 = f1_score(y_true, final_result, average="weighted")
-    recall = recall_score(y_true, final_result)
-    precision = precision_score(y_true, final_result)
+    recall = recall_score(y_true, final_result, average="weighted")
+    precision = precision_score(y_true, final_result, average="weighted")
 
     print(f"with threshold {threshold / 10} ")
     print(f"recall : {recall}")

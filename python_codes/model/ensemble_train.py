@@ -33,6 +33,14 @@ whole_report = []
 result_path = "results/ensemble_train"
 os.makedirs(result_path, exist_ok=True)
 
+light_gbm_model_dict = {
+    "LightGBMClassifier": {
+        "params": {
+            "learning_rate": {"type": 2, "min": 0.1, "max": 0.2},
+        },
+    },
+}
+
 for i, df in enumerate(pd.read_csv(not_fraud_file, chunksize=chunk_size)):
     # select y
     df = pd.concat([df, fraud_df], ignore_index=True)
@@ -47,8 +55,12 @@ for i, df in enumerate(pd.read_csv(not_fraud_file, chunksize=chunk_size)):
 
     # Train
     logging.info(f"train {i}th chunk")
-    trainer = Trainer()
-    now_model = trainer.train_with_hpo(df.to_numpy(), y, list(df.columns), n_iter=10)
+
+    # five random forest and five light gbm
+    trainer = Trainer(
+        custom_model=light_gbm_model_dict
+    )
+    now_model = trainer.train_with_hpo(df.to_numpy(), y, list(df.columns), n_iter=1)
     report = trainer.report()
 
     ensemble.append(now_model)
@@ -56,8 +68,6 @@ for i, df in enumerate(pd.read_csv(not_fraud_file, chunksize=chunk_size)):
         "index": i,
         "data": report
     })
-    if i >= 19:
-        break
 
 with open(f"{result_path}/report.json", "w") as f:
     json.dump(whole_report, f, cls=NpEncoder, indent=4)

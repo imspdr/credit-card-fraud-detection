@@ -27,8 +27,8 @@ def get_db():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("add card, user csv to db")
-    load_user_to_db()
-    load_card_to_db()
+    # load_user_to_db()
+    # load_card_to_db()
 
     yield
 
@@ -45,7 +45,7 @@ HEADERS = {
     "Host": "fraud-detection-serving.default.example.com",
     "Content-Type": "application/json",
 }
-
+TRANSACTION_KEYS = ["User", "Card", "Time", "Amount", "Use Chip", "Merchant Name", "Merchant City", "Merchant State","Zip", "MCC"]
 
 @app.post("/inference/")
 async def inference_api(request_data: List[Dict[str, Any]], db: Session = Depends(get_db)):
@@ -55,6 +55,13 @@ async def inference_api(request_data: List[Dict[str, Any]], db: Session = Depend
         user_cache = []
         card_cache = []
         for item in request_data:
+            # STEP1. validation
+            for key in TRANSACTION_KEYS:
+                try:
+                    item[key]
+                except KeyError:
+                    raise Exception("input data invalid")
+            # STEP2. load user, card info from db
             user_id = item["User"]
             card_id = item["Card"]
             user_info, card_info = fetch_data_from_db(db, user_id, card_id)
@@ -65,6 +72,7 @@ async def inference_api(request_data: List[Dict[str, Any]], db: Session = Depend
                 card_info_list.append(card_info)
                 card_cache.append((user_id, card_id))
 
+        # STEP3. send request to inference service of kserve
         payload = {
             "instances": [],
             "user": user_info_list,

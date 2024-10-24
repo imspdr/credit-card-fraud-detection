@@ -4,10 +4,12 @@ import numpy as np
 import hpbandster.core.nameserver as hpns
 from hpbandster.optimizers import BOHB
 from hpbandster.core.worker import Worker
+from numpy.ma.extras import average
+
 from .config_parser import ConfigParser
 from .model_runner import ModelRunner
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score, recall_score, confusion_matrix
+from sklearn.metrics import f1_score, recall_score, confusion_matrix, accuracy_score, precision_score
 
 '''
 Traner using BOHB optimization module
@@ -16,15 +18,6 @@ Recorder : record result from each worker and track best config & loss
 Worker : run train and evaluating for each iteration of bayesian optimization
 Trainer : run bohb optimization and deal informations
 '''
-
-
-def evaluate_loss(y_test, y_hat):
-    return recall_score(y_test, y_hat, average="weighted")
-
-def my_confusion_matrix(y_test, y_hat):
-    uniques = np.unique(y_hat)
-    class_value = confusion_matrix(y_test, y_hat, labels=uniques)
-    return class_value, uniques
 
 class Recorder:
     def __init__(self):
@@ -79,7 +72,7 @@ class MyWorker(Worker):
             now_y_train = np.hstack(now_y_train_list)
             pp.train(now_X_train, now_y_train, self.col_names)
             y_hat = pp.inference(now_X_test)
-            f1 = evaluate_loss(now_y_test, y_hat)
+            f1 = f1_score(now_y_test, y_hat, average="weighted")
             score.append(1 - f1)
         mean_loss = np.mean(score)
 
@@ -91,8 +84,11 @@ class MyWorker(Worker):
 
 
 class Trainer:
-    def __init__(self):
-        self.config_parser = ConfigParser()
+    def __init__(self, custom_model=None):
+        if custom_model:
+            self.config_parser = ConfigParser(custom_model=custom_model)
+        else:
+            self.config_parser = ConfigParser()
         self.recorder = Recorder()
         self.best_model = None
         self.best_loss = {}
@@ -180,9 +176,17 @@ class Trainer:
         X_test, y_test = division[-1]
         temp_best_model.train(X_train, y_train, col_names)
         y_hat = temp_best_model.inference(X_test)
-        loss = evaluate_loss(y_test, y_hat)
-        self.best_loss = loss
+        f1 = f1_score(y_test, y_hat, average="weighted")
+        recall = recall_score(y_test, y_hat, average="weighted")
+        accuracy = accuracy_score(y_test, y_hat)
+        precision = precision_score(y_test, y_hat, average="weighted")
 
+        self.best_loss = {
+            "f1": f1,
+            "recall": recall,
+            "precision": precision,
+            "accuracy": accuracy
+        }
         '''
         STEP 4. save & train with full data
         '''

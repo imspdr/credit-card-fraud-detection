@@ -1,5 +1,6 @@
 import numpy as np
 import json
+import os
 from tqdm import tqdm
 from python_codes.model.train.util import NpEncoder
 from python_codes.model.train.preprocess_user_card import *
@@ -68,11 +69,8 @@ def analyze_distribution(df):
         })
     return data_distributions
 
-def load_df(df):
-    user_df = preprocess_user(pd.read_csv("../data/processed/sd254_users_with_id.csv"))
+def load_df(df, user_df, card_df):
     df = pd.merge(df, user_df, left_on="User", right_on="id", how="left")
-
-    card_df = preprocess_card(pd.read_csv("../data/given/sd254_cards.csv"))
     df = pd.merge(df, card_df, left_on=["User", "Card"], right_on=["User", "CARD INDEX"], how="left")
 
     columns_to_drop = [
@@ -86,8 +84,11 @@ def load_df(df):
 
 
 fraud_df = pd.read_csv("../data/processed/fraud_cases.csv")
+user_df = preprocess_user(pd.read_csv("../data/processed/sd254_users_with_id.csv"))
+card_df = preprocess_card(pd.read_csv("../data/given/sd254_cards.csv"))
 not_fraud_chunks = []
-
+result_path = "results/whole"
+os.makedirs(result_path, exist_ok = True)
 chunk_size = 100000
 
 for chunk in tqdm(pd.read_csv("../data/processed/not_fraud_cases.csv", chunksize=chunk_size), desc="reading not fraud data"):
@@ -98,12 +99,12 @@ for chunk in tqdm(pd.read_csv("../data/processed/not_fraud_cases.csv", chunksize
 not_fraud_df = pd.concat(not_fraud_chunks, ignore_index=True)
 
 print("fraud")
-fraud_data_dist = analyze_distribution(load_df(fraud_df))
-with open("fraud_data_dist.json", "w") as f:
+fraud_data_dist = analyze_distribution(load_df(fraud_df, user_df, card_df))
+with open(f"{result_path}/fraud_data_dist.json", "w") as f:
     json.dump(fraud_data_dist, f, cls=NpEncoder, indent=4)
 
 print("not_fraud")
-not_fraud_data_dist = analyze_distribution(load_df(not_fraud_df))
-with open("not_fraud_data_dist.json", "w") as f:
+not_fraud_data_dist = analyze_distribution(load_df(not_fraud_df, user_df, card_df))
+with open(f"{result_path}/not_fraud_data_dist.json", "w") as f:
     json.dump(not_fraud_data_dist, f, cls=NpEncoder, indent=4)
 

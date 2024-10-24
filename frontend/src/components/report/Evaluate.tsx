@@ -1,7 +1,7 @@
 import { Card } from "@mui/material";
 import { css } from "@emotion/react";
 import { Typography } from "@mui/material";
-import { Base } from "@src/store/type";
+import { Loss } from "@src/store/type";
 import { ResponsiveBar } from "@nivo/bar";
 
 function SingleBar(props: { value: number; width: number }) {
@@ -49,11 +49,7 @@ function SingleBar(props: { value: number; width: number }) {
   );
 }
 
-export default function Evaluate(props: {
-  width: number;
-  height: number;
-  evaluate: Base[] | undefined;
-}) {
+export default function Evaluate(props: { width: number; height: number; evaluate: Loss }) {
   return (
     <Card
       css={css`
@@ -76,7 +72,7 @@ export default function Evaluate(props: {
             gap: 15px;
           `}
         >
-          {props.evaluate.map((item: Base) => {
+          {[...Object.keys(props.evaluate)].map((key: string) => {
             return (
               <div
                 css={css`
@@ -85,8 +81,11 @@ export default function Evaluate(props: {
                   gap: 5px;
                 `}
               >
-                <Typography variant="h6">{item.name}</Typography>
-                <SingleBar width={props.width} value={Number(Number(item.value).toFixed(4))} />
+                <Typography variant="h6">{key}</Typography>
+                <SingleBar
+                  width={props.width}
+                  value={Number(Number(props.evaluate[key as keyof Loss]).toFixed(4))}
+                />
               </div>
             );
           })}

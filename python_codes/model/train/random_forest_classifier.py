@@ -6,16 +6,17 @@ implement additive training by extending estimators for full train near 24millio
 '''
 
 class CustomRandomForestClassifier:
-    def __init__(self, n_estimators=20, max_features=0.8):
+    def __init__(self, **kwargs):
         self.name = "RandomForestClassifier"
-        self.n_estimators = n_estimators
-        self.model = RandomForestClassifier(n_estimators=n_estimators, max_features=max_features)
+        self.n_estimators = kwargs["n_estimators"]
+        self.model = RandomForestClassifier(**kwargs)
         self.col_names = None
 
     def fit(self, X, y, col_names):
         self.model.fit(X, y)
         self.col_names = col_names
         return self
+
     def additive_fit(self, X, y):
         self.model.set_params(
             warm_start=True,

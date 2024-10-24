@@ -1,0 +1,582 @@
+[
+  {
+    "index": 0,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.07706849192674178
+        },
+        {
+          "name": "num_leaves",
+          "value": 466
+        }
+      ],
+      "best_loss": {
+        "f1": 0.9378649468722514,
+        "recall": 0.937549187537614,
+        "accuracy": 0.937549187537614,
+        "precision": 0.9382918749015945
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.0531, 0.0699, 0.0335, 0.0048, 0.0327, 0.0261, 0.0322, 0.0415, 0.0198, 0.0042, 0.0013,
+          0.005, 0.0369, 0.0183, 0.0643, 0.0127, 0.0834, 0.0085, 0.0065, 0.0066, 0.0455, 0.036,
+          0.0301, 0.3271
+        ]
+      }
+    }
+  },
+  {
+    "index": 1,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.1478667458810918
+        },
+        {
+          "name": "num_leaves",
+          "value": 359
+        }
+      ],
+      "best_loss": {
+        "f1": 0.9369306773724951,
+        "recall": 0.9366233044766445,
+        "accuracy": 0.9366233044766445,
+        "precision": 0.9373400793264463
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.0513, 0.0736, 0.0349, 0.0045, 0.0351, 0.0252, 0.0305, 0.0459, 0.0198, 0.0036, 0.0014,
+          0.0053, 0.0364, 0.0192, 0.062, 0.0142, 0.0823, 0.0089, 0.0043, 0.0078, 0.0431, 0.0352,
+          0.0305, 0.3249
+        ]
+      }
+    }
+  },
+  {
+    "index": 2,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.1211910473195681
+        },
+        {
+          "name": "num_leaves",
+          "value": 500
+        }
+      ],
+      "best_loss": {
+        "f1": 0.9382081371707783,
+        "recall": 0.9381510115272441,
+        "accuracy": 0.9381510115272441,
+        "precision": 0.9382688941283032
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.0466, 0.0797, 0.0347, 0.0053, 0.036, 0.0264, 0.0357, 0.042, 0.0184, 0.0056, 0.0026,
+          0.005, 0.0341, 0.0199, 0.0635, 0.0128, 0.081, 0.0082, 0.0052, 0.0061, 0.0364, 0.0334,
+          0.0283, 0.3328
+        ]
+      }
+    }
+  },
+  {
+    "index": 3,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.18371565070326878
+        },
+        {
+          "name": "num_leaves",
+          "value": 254
+        }
+      ],
+      "best_loss": {
+        "f1": 0.9342555725699977,
+        "recall": 0.9340308319059303,
+        "accuracy": 0.9340308319059303,
+        "precision": 0.9345299873044585
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.0517, 0.0711, 0.0331, 0.0049, 0.0344, 0.0265, 0.0321, 0.0414, 0.0204, 0.005, 0.0023,
+          0.0053, 0.0365, 0.0179, 0.066, 0.0104, 0.0841, 0.0075, 0.0062, 0.006, 0.0474, 0.0337,
+          0.0308, 0.3255
+        ]
+      }
+    }
+  },
+  {
+    "index": 4,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.16733488852578843
+        },
+        {
+          "name": "num_leaves",
+          "value": 191
+        }
+      ],
+      "best_loss": {
+        "f1": 0.9358947177978166,
+        "recall": 0.9354659506504328,
+        "accuracy": 0.9354659506504328,
+        "precision": 0.9365164764059319
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.0545, 0.0693, 0.0371, 0.0048, 0.0393, 0.0252, 0.0309, 0.0441, 0.0179, 0.0039, 0.0018,
+          0.0043, 0.0355, 0.0198, 0.0675, 0.0139, 0.0822, 0.0073, 0.0054, 0.0047, 0.0447, 0.0329,
+          0.0327, 0.3203
+        ]
+      }
+    }
+  },
+  {
+    "index": 5,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.19631855272902296
+        },
+        {
+          "name": "num_leaves",
+          "value": 423
+        }
+      ],
+      "best_loss": {
+        "f1": 0.9365284519220195,
+        "recall": 0.9365307161705476,
+        "accuracy": 0.9365307161705476,
+        "precision": 0.9365261930453974
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.047, 0.0708, 0.036, 0.0059, 0.0335, 0.0224, 0.0323, 0.0442, 0.0183, 0.0043, 0.0024,
+          0.0054, 0.0341, 0.0177, 0.065, 0.013, 0.0831, 0.0086, 0.0056, 0.0072, 0.0433, 0.035,
+          0.0299, 0.3348
+        ]
+      }
+    }
+  },
+  {
+    "index": 6,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.09844689694734363
+        },
+        {
+          "name": "num_leaves",
+          "value": 412
+        }
+      ],
+      "best_loss": {
+        "f1": 0.937339474485871,
+        "recall": 0.9369010693949354,
+        "accuracy": 0.9369010693949354,
+        "precision": 0.9379898005250636
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.0527, 0.0683, 0.036, 0.0049, 0.0341, 0.0243, 0.0322, 0.0406, 0.0201, 0.0044, 0.0019,
+          0.0051, 0.0348, 0.0186, 0.0618, 0.0119, 0.0845, 0.0083, 0.0056, 0.0077, 0.0495, 0.033,
+          0.0279, 0.3319
+        ]
+      }
+    }
+  },
+  {
+    "index": 7,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.09900173222722601
+        },
+        {
+          "name": "num_leaves",
+          "value": 396
+        }
+      ],
+      "best_loss": {
+        "f1": 0.9363516931246041,
+        "recall": 0.936067774640063,
+        "accuracy": 0.936067774640063,
+        "precision": 0.9367208202281038
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.0496, 0.0768, 0.0339, 0.0058, 0.0352, 0.0246, 0.031, 0.0426, 0.0175, 0.0047, 0.0018,
+          0.0051, 0.0352, 0.0181, 0.0662, 0.0101, 0.0806, 0.0068, 0.005, 0.0061, 0.0382, 0.0354,
+          0.031, 0.3387
+        ]
+      }
+    }
+  },
+  {
+    "index": 8,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.18452808387303665
+        },
+        {
+          "name": "num_leaves",
+          "value": 359
+        }
+      ],
+      "best_loss": {
+        "f1": 0.9385824971596617,
+        "recall": 0.9385213647516318,
+        "accuracy": 0.9385213647516318,
+        "precision": 0.9386478431983943
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.0489, 0.0664, 0.0332, 0.0062, 0.0345, 0.0268, 0.031, 0.0439, 0.0183, 0.0048, 0.0023,
+          0.0055, 0.0344, 0.0185, 0.0641, 0.0129, 0.0808, 0.0077, 0.0066, 0.006, 0.0481, 0.0362,
+          0.0277, 0.3354
+        ]
+      }
+    }
+  },
+  {
+    "index": 9,
+    "data": {
+      "best_config": [
+        {
+          "name": "model name",
+          "value": "LightGBMClassifier"
+        },
+        {
+          "name": "learning_rate",
+          "value": 0.1528047773824999
+        },
+        {
+          "name": "num_leaves",
+          "value": 375
+        }
+      ],
+      "best_loss": {
+        "f1": 0.9344710174711166,
+        "recall": 0.9343548909772695,
+        "accuracy": 0.9343548909772695,
+        "precision": 0.9346004272560153
+      },
+      "feature_importance": {
+        "label": [
+          "Time",
+          "Amount",
+          "Current Age",
+          "Gender",
+          "Per Capita Income - Zipcode",
+          "Yearly Income - Person",
+          "Total Debt",
+          "FICO Score",
+          "Num Credit Cards",
+          "Card Type",
+          "Has Chip",
+          "Cards Issued",
+          "Credit Limit",
+          "Year PIN last Changed",
+          "Use Chip = Online",
+          "Use Chip = Swipe",
+          "Merchant State = Italy",
+          "Merchant Name = 19134774",
+          "Zip = 44680",
+          "MCC = 5311",
+          "Amount / Income",
+          "Amount / Credit Limit",
+          "Amount / Total Debt",
+          "user City = merchant city"
+        ],
+        "value": [
+          0.0537, 0.0834, 0.0403, 0.0049, 0.0316, 0.0246, 0.0341, 0.0432, 0.0196, 0.0039, 0.0024,
+          0.005, 0.0377, 0.0197, 0.0639, 0.011, 0.0718, 0.0076, 0.0044, 0.0059, 0.037, 0.0346,
+          0.0299, 0.3296
+        ]
+      }
+    }
+  }
+]
