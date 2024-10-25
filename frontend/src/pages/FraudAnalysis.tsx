@@ -25,6 +25,7 @@ function FraudAnalysis() {
         display: flex;
         flex-direction: row;
         padding: 20px;
+        justify-content: center;
         gap: 20px;
         overflow: auto;
       `}

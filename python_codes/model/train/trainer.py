@@ -72,7 +72,7 @@ class MyWorker(Worker):
             now_y_train = np.hstack(now_y_train_list)
             pp.train(now_X_train, now_y_train, self.col_names)
             y_hat = pp.inference(now_X_test)
-            f1 = f1_score(now_y_test, y_hat, average="weighted")
+            f1 = f1_score(now_y_test, y_hat)
             score.append(1 - f1)
         mean_loss = np.mean(score)
 
@@ -176,10 +176,10 @@ class Trainer:
         X_test, y_test = division[-1]
         temp_best_model.train(X_train, y_train, col_names)
         y_hat = temp_best_model.inference(X_test)
-        f1 = f1_score(y_test, y_hat, average="weighted")
-        recall = recall_score(y_test, y_hat, average="weighted")
+        f1 = f1_score(y_test, y_hat)
+        recall = recall_score(y_test, y_hat)
         accuracy = accuracy_score(y_test, y_hat)
-        precision = precision_score(y_test, y_hat, average="weighted")
+        precision = precision_score(y_test, y_hat)
 
         self.best_loss = {
             "f1": f1,
@@ -195,6 +195,11 @@ class Trainer:
         self.best_model = ModelRunner(**self.config_parser.bohb_config2model_runner(self.recorder.best_config))
         self.best_model.train(X, y, col_names)
         return self.best_model
+
+    def train(self, X, y, col_names):
+        best_model = ModelRunner(**self.config_parser.bohb_config2model_runner(self.recorder.best_config))
+        best_model.train(X, y, col_names)
+        return best_model
 
     def report(self):
         return {

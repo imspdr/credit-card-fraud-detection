@@ -15,13 +15,13 @@ model_mapper = {
 model_dict = {
     "LightGBMClassifier": {
         "params": {
-            "num_leaves": {"type": 1, "min": 32, "max": 512},
-            "learning_rate": {"type": 2, "min": 0.01, "max": 0.2},
+            "num_leaves": {"type": 1, "min": 32, "max": 128},
+            "learning_rate": {"type": 2, "min": 0.1, "max": 0.3},
         },
     },
     "RandomForestClassifier": {
         "params": {
-            "n_estimators": {"type": 1, "min": 20, "max": 100},
+            "n_estimators": {"type": 1, "min": 100, "max": 200},
             "max_features": {"type": 2, "min": 0.1, "max": 0.8},
         },
     },

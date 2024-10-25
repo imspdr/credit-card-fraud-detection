@@ -45,8 +45,8 @@ html {
 
 *::-webkit-scrollbar,
 *::-webkit-scrollbar-thumb {
-  width: 5px !important;
-  height: 5px;
+  width: 8px !important;
+  height: 8px;
   border-radius: 2px !important;
   margin: 0 !important;
   color: var(--scrollColor) !important;

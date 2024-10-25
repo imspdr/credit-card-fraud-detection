@@ -4,17 +4,11 @@ import { Transaction } from "./type";
 export const inference = async (transactions: Transaction[]) => {
   const url = `/api/inference`;
   const ret = await axios
-    .post(
-      url,
-      {
-        instances: transactions,
+    .post(url, transactions, {
+      headers: {
+        "Content-Type": "application/json",
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    })
     .then((data: any) => {
       return data.data;
     })

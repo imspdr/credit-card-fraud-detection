@@ -30,16 +30,17 @@ card_df = preprocess_card(pd.read_csv("../data/given/sd254_cards.csv"))
 ensemble = []
 whole_report = []
 
-result_path = "results/ensemble_train"
-os.makedirs(result_path, exist_ok=True)
-
-light_gbm_model_dict = {
+light_gbm_dict = {
     "LightGBMClassifier": {
         "params": {
-            "learning_rate": {"type": 2, "min": 0.1, "max": 0.2},
+            "num_leaves": {"type": 1, "min": 32, "max": 128},
+            "learning_rate": {"type": 2, "min": 0.1, "max": 0.3},
         },
     },
 }
+
+result_path = "results/ensemble_train"
+os.makedirs(result_path, exist_ok=True)
 
 for i, df in enumerate(pd.read_csv(not_fraud_file, chunksize=chunk_size)):
     # select y
@@ -55,19 +56,12 @@ for i, df in enumerate(pd.read_csv(not_fraud_file, chunksize=chunk_size)):
 
     # Train
     logging.info(f"train {i}th chunk")
-
-    # five random forest and five light gbm
-    trainer = Trainer(
-        custom_model=light_gbm_model_dict
-    )
-    now_model = trainer.train_with_hpo(df.to_numpy(), y, list(df.columns), n_iter=1)
-    report = trainer.report()
-
+    trainer = Trainer(custom_model=light_gbm_dict)
+    now_model = trainer.train_with_hpo(df.to_numpy(), y, list(df.columns), n_iter=10)
     ensemble.append(now_model)
-    whole_report.append({
-        "index": i,
-        "data": report
-    })
+    whole_report.append({"index": i, "data": trainer.report()})
+    if i >= 29:
+        break
 
 with open(f"{result_path}/report.json", "w") as f:
     json.dump(whole_report, f, cls=NpEncoder, indent=4)

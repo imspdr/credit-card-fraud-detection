@@ -27,27 +27,28 @@ def get_db():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("add card, user csv to db")
-    # load_user_to_db()
-    # load_card_to_db()
+    load_user_to_db()
+    load_card_to_db()
 
     yield
 
     print("shutting down server. drop user, card table")
-    # User.__table__.drop(engine)
-    # Card.__table__.drop(engine)
+    User.__table__.drop(engine)
+    Card.__table__.drop(engine)
 
 app = FastAPI(lifespan=lifespan)
 
 ISTIO_IP = os.getenv("ISTIO_IP", "192.168.49.2")
 ISTIO_PORT = os.getenv("ISTIO_PORT", "31397")
+NAMESPACE = os.getenv("NAMESPACE", "default")
 EXTERNAL_URL = f"http://{ISTIO_IP}:{ISTIO_PORT}/v1/models/fraud-detection-serving:predict"
 HEADERS = {
-    "Host": "fraud-detection-serving.default.example.com",
+    "Host": f"fraud-detection-serving.{NAMESPACE}.example.com",
     "Content-Type": "application/json",
 }
 TRANSACTION_KEYS = ["User", "Card", "Time", "Amount", "Use Chip", "Merchant Name", "Merchant City", "Merchant State","Zip", "MCC"]
 
-@app.post("/inference/")
+@app.post("/inference")
 async def inference_api(request_data: List[Dict[str, Any]], db: Session = Depends(get_db)):
     try:
         user_info_list = []
@@ -81,16 +82,13 @@ async def inference_api(request_data: List[Dict[str, Any]], db: Session = Depend
         }
         async with httpx.AsyncClient() as client:
             response = await client.post(EXTERNAL_URL, json=payload, headers=HEADERS)
-
-        response.raise_for_status()
-
         return response.json()
 
     except httpx.HTTPStatusError as exc:
         raise HTTPException(status_code=exc.response.status_code, detail=exc.response.text)
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {e}")
 
 def fetch_data_from_db(db: Session, user_id: int, card_id: int):
     selected_user = db.query(User).filter(User.id == user_id).first()

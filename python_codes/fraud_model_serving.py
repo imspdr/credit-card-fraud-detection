@@ -58,9 +58,7 @@ class FraudServing(kserve.Model):
             df = pd.DataFrame(payload["transaction"])
             user_df = preprocess_user(pd.DataFrame(payload["user"]))
             card_df = preprocess_card(pd.DataFrame(payload["card"]))
-            print(df)
-            print(user_df)
-            print(card_df)
+
             df = preprocessing(df, card_df, user_df)
             df = add_fraud_one_hot(df)
             df = generate_user_feature(df)
@@ -69,8 +67,6 @@ class FraudServing(kserve.Model):
             for i, model in enumerate(self.model):
                 y_hat = model.inference(df.to_numpy())
                 result.append(y_hat)
-                print(f"{i}th model result")
-                print(y_hat)
 
             y_hats_array = np.array(result)
             mean_y_hat = np.mean(y_hats_array, axis=0)

@@ -1,20 +1,20 @@
-export type Transaction =   {
-  "User": number;
-  "Card": number;
-  "Year": number;
-  "Month": number;
-  "Day": number;
-  "Time": string;
-  "Amount": string;
+export type Transaction = {
+  User: number;
+  Card: number;
+  Year: number;
+  Month: number;
+  Day: number;
+  Time: string;
+  Amount: string;
   "Use Chip": string;
   "Merchant Name": number;
   "Merchant City": string;
   "Merchant State": string | null;
-  "Zip": number | null;
-  "MCC": number;
+  Zip: number | null;
+  MCC: number;
   "Errors?": string | null;
   "Is Fraud?": string;
-},
+};
 
 export type UserData = {
   user: number;
@@ -62,6 +62,7 @@ export type Loss = {
   recall: number;
   accuracy: number;
 };
+
 export type ModelReport = {
   index: number;
   data: {

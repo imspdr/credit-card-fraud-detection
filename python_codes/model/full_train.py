@@ -15,7 +15,7 @@ Train random forest with full data
 load train data chunk by chunk and do additive train
 '''
 chunk_size = 100000
-custom_model = CustomRandomForestClassifier(n_estimators=20, max_features=0.8)
+custom_model = CustomRandomForestClassifier(n_estimators=10, max_features=0.8)
 train_file = "../data/processed/train_transactions.csv"
 result_path = "results/full_train"
 user_df = preprocess_user(pd.read_csv("../data/processed/sd254_users_with_id.csv"))

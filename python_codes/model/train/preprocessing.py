@@ -6,10 +6,16 @@ def preprocessing(df: pd.DataFrame, card_df: pd.DataFrame, user_df: pd.DataFrame
     df = df[columns_to_use]
 
     # 1. Time - remove minute
-    df.loc[:, "Time"] = df["Time"].apply(lambda t: t.split(":")[0]).astype(int)
+    try:
+        df.loc[:, "Time"] = df["Time"].apply(lambda t: t.split(":")[0]).astype(int)
+    except (ValueError, TypeError):
+        raise Exception("Invalid time column")
 
     # 2. Amount - remove dollar sign
-    df.loc[:, "Amount"] = df["Amount"].apply(lambda amount: amount[1:]).astype(float)
+    try:
+        df.loc[:, "Amount"] = df["Amount"].apply(lambda amount: amount[1:]).astype(float)
+    except (ValueError, TypeError):
+        raise Exception("invalid amount column")
 
     # 3. Merge user info
     user_merged_df = pd.merge(df, user_df, left_on="User", right_on="id", how="left")

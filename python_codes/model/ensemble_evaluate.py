@@ -39,15 +39,38 @@ y_hats_array = np.array(result)
 # get mean of data
 mean_y_hat = np.mean(y_hats_array, axis=0)
 
-# for each threshold get result
-for threshold in range(1, 10):
-    final_result = (mean_y_hat >= threshold / 10).astype(int)
-    f1 = f1_score(y_true, final_result, average="weighted")
-    recall = recall_score(y_true, final_result, average="weighted")
-    precision = precision_score(y_true, final_result, average="weighted")
+thresholds = np.arange(0.1, 1.0, 0.1)
+f1_scores = []
+recalls = []
+precisions = []
 
-    print(f"with threshold {threshold / 10} ")
+# for each threshold get result
+for threshold in thresholds:
+    final_result = (mean_y_hat >= threshold).astype(int)
+    f1 = f1_score(y_true, final_result)
+    recall = recall_score(y_true, final_result)
+    precision = precision_score(y_true, final_result)
+
+    f1_scores.append(f1)
+    recalls.append(recall)
+    precisions.append(precision)
+    print(f"with threshold {threshold} ")
     print(f"recall : {recall}")
     print(f"precision : {precision}")
-    print(f"weighted f1 : {f1}")
+    print(f"f1 : {f1}")
     print(classification_report(y_true, final_result))
+
+
+
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 6))
+plt.plot(thresholds, f1_scores, label='F1 Score', marker='o')
+plt.plot(thresholds, precisions, label='Precision', marker='o')
+plt.plot(thresholds, recalls, label='Recall', marker='o')
+
+plt.xlabel('Threshold')
+plt.ylabel('Score')
+plt.legend(loc='best')
+plt.grid(True)
+plt.show()
