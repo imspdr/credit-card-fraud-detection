@@ -15,7 +15,7 @@ export default function ServingResult(props: { result: number[] }) {
     <TableContainer
       component={Paper}
       css={css`
-        width: 100px;
+        width: 200px;
         height: 600px;
         font-size: 8px;
       `}

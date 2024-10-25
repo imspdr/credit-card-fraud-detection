@@ -13,7 +13,6 @@ spec:
       labels:
         app: fraud-detection-back
     spec:
-      serviceAccountName: fraud-detection-sa
       containers:
         - name: fraud-detection-back
           image: {{ .Values.backend.image }}
