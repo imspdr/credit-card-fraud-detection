@@ -2,8 +2,7 @@ import numpy as np
 import json
 import os
 from tqdm import tqdm
-from python_codes.model.train.util import NpEncoder
-from python_codes.model.train.preprocess_user_card import *
+from util import preprocess_card, preprocess_user, NpEncoder
 
 '''
 distribution analysis of fraud data

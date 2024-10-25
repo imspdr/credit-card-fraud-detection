@@ -28,6 +28,7 @@ function ServingPage() {
       css={css`
         display: flex;
         flex-direction: column;
+        align-items: center;
         padding: 20px;
         gap: 20px;
       `}

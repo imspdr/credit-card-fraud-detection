@@ -6,10 +6,11 @@ import pandas as pd
 import numpy as np
 
 from typing import Dict
-from train.preprocessing import preprocessing
-from train.add_fraud_one_hot import add_fraud_one_hot
-from train.generate_user_feature import generate_user_feature
-from train.preprocess_user_card import preprocess_card, preprocess_user
+from model.feature_engineering.preprocess_user_card import preprocess_user, preprocess_card
+from model.feature_engineering.generate_user_feature import generate_user_feature
+from model.feature_engineering.preprocessing import preprocessing
+from model.feature_engineering.generate_age_feature import generate_age_feature
+from model.feature_engineering.add_fraud_one_hot import add_fraud_one_hot
 
 def try_or_default(dict, key, default_value):
     try:
@@ -55,19 +56,27 @@ class FraudServing(kserve.Model):
 
     def predict(self, payload: Dict, headers: Dict[str, str] = None) -> Dict:
         try:
+            logging.info("[predictor] start serving")
             df = pd.DataFrame(payload["transaction"])
             user_df = preprocess_user(pd.DataFrame(payload["user"]))
             card_df = preprocess_card(pd.DataFrame(payload["card"]))
 
+            logging.info(f"[predictor] successfully read request data length : {len(df)}")
             df = preprocessing(df, card_df, user_df)
+            df = generate_age_feature(df)
             df = add_fraud_one_hot(df)
             df = generate_user_feature(df)
 
+            logging.info("[predictor] successfully done feature engineering")
             result = []
+
+
+            logging.info("[predictor] start prediction")
             for i, model in enumerate(self.model):
-                y_hat = model.inference(df.to_numpy())
+                y_hat = model.inference_proba(df.to_numpy())
                 result.append(y_hat)
 
+            logging.info("[predictor] prediction done")
             y_hats_array = np.array(result)
             mean_y_hat = np.mean(y_hats_array, axis=0)
 

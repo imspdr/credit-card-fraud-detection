@@ -7,7 +7,7 @@ import ModelPage from "./pages/ModelPage";
 import ServingPage from "./pages/ServingPage";
 
 function App() {
-  const [tab, setTab] = useState(2);
+  const [tab, setTab] = useState(0);
 
   const tabInfos = [
     {

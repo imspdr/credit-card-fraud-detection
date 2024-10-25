@@ -4,12 +4,13 @@ import json
 import pickle
 import os
 
-from train.util import NpEncoder
-from train.preprocess_user_card import preprocess_user, preprocess_card
-from train.generate_user_feature import generate_user_feature
-from train.preprocessing import preprocessing
-from train.add_fraud_one_hot import add_fraud_one_hot
-from train.trainer import Trainer
+from model.util import NpEncoder
+from model.feature_engineering.preprocess_user_card import preprocess_user, preprocess_card
+from model.feature_engineering.generate_user_feature import generate_user_feature
+from model.feature_engineering.preprocessing import preprocessing
+from model.feature_engineering.generate_age_feature import generate_age_feature
+from model.feature_engineering.add_fraud_one_hot import add_fraud_one_hot
+from model.trainer.trainer import Trainer
 
 logging.basicConfig(level=logging.INFO)
 
@@ -51,16 +52,17 @@ for i, df in enumerate(pd.read_csv(not_fraud_file, chunksize=chunk_size)):
 
     # preprocessing
     df = preprocessing(df, card_df, user_df)
+    df = generate_age_feature(df)
     df = add_fraud_one_hot(df)
     df = generate_user_feature(df)
 
-    # Train
+    # train
     logging.info(f"train {i}th chunk")
     trainer = Trainer(custom_model=light_gbm_dict)
     now_model = trainer.train_with_hpo(df.to_numpy(), y, list(df.columns), n_iter=10)
     ensemble.append(now_model)
     whole_report.append({"index": i, "data": trainer.report()})
-    if i >= 29:
+    if i >= 9:
         break
 
 with open(f"{result_path}/report.json", "w") as f:

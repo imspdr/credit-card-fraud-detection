@@ -3,12 +3,15 @@ import json
 import pickle
 import os
 from tqdm import tqdm
-from train.util import NpEncoder
-from train.preprocessing import preprocessing
-from train.add_fraud_one_hot import add_fraud_one_hot
-from train.generate_user_feature import generate_user_feature
-from train.random_forest_classifier import CustomRandomForestClassifier
-from train.preprocess_user_card import preprocess_user, preprocess_card
+
+from model.util import NpEncoder
+from model.feature_engineering.preprocess_user_card import preprocess_user, preprocess_card
+from model.feature_engineering.generate_user_feature import generate_user_feature
+from model.feature_engineering.preprocessing import preprocessing
+from model.feature_engineering.generate_age_feature import generate_age_feature
+from model.feature_engineering.add_fraud_one_hot import add_fraud_one_hot
+from model.trainer.random_forest_classifier import CustomRandomForestClassifier
+
 
 '''
 Train random forest with full data
@@ -31,6 +34,7 @@ for i, df in tqdm(enumerate(pd.read_csv(train_file, chunksize=chunk_size)), desc
 
     # preprocessing
     df = preprocessing(df, card_df, user_df)
+    df = generate_age_feature(df)
     df = add_fraud_one_hot(df)
     df = generate_user_feature(df)
 

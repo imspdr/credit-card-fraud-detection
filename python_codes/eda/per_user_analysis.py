@@ -1,9 +1,8 @@
-import numpy as np
 import json
 import os
+import pandas as pd
 
-from python_codes.model.train.util import NpEncoder
-from python_codes.model.train.preprocess_user_card import *
+from util import preprocess_card, preprocess_user, NpEncoder
 
 '''
 distribution analysis per user for Time, Amount, Merchant Name

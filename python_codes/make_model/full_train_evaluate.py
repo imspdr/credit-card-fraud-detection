@@ -1,9 +1,10 @@
 import pickle
 import pandas as pd
-from train.preprocess_user_card import preprocess_user, preprocess_card
-from train.preprocessing import preprocessing
-from train.add_fraud_one_hot import add_fraud_one_hot
-from train.generate_user_feature import generate_user_feature
+from model.feature_engineering.preprocess_user_card import preprocess_user, preprocess_card
+from model.feature_engineering.generate_user_feature import generate_user_feature
+from model.feature_engineering.preprocessing import preprocessing
+from model.feature_engineering.generate_age_feature import generate_age_feature
+from model.feature_engineering.add_fraud_one_hot import add_fraud_one_hot
 from sklearn.metrics import classification_report
 from sklearn.metrics import f1_score
 
@@ -21,6 +22,7 @@ result_path = "results/full_train"
 
 # preprocessing
 df = preprocessing(df, card_df, user_df)
+df = generate_age_feature(df)
 df = add_fraud_one_hot(df)
 df = generate_user_feature(df)
 

@@ -62,6 +62,7 @@ export default function FraudDistributionChart(props: {
           flex-direction: column;
           justify-content: center;
           gap: 10px;
+          padding: 0px 20px;
         `}
       >
         <Typography>Fraud</Typography>

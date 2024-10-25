@@ -1,10 +1,11 @@
 import pickle
 import pandas as pd
 import numpy as np
-from train.preprocess_user_card import preprocess_user, preprocess_card
-from train.preprocessing import preprocessing
-from train.add_fraud_one_hot import add_fraud_one_hot
-from train.generate_user_feature import generate_user_feature
+from model.feature_engineering.preprocess_user_card import preprocess_user, preprocess_card
+from model.feature_engineering.generate_user_feature import generate_user_feature
+from model.feature_engineering.preprocessing import preprocessing
+from model.feature_engineering.generate_age_feature import generate_age_feature
+from model.feature_engineering.add_fraud_one_hot import add_fraud_one_hot
 from sklearn.metrics import classification_report, f1_score, recall_score, precision_score
 from tqdm import tqdm
 
@@ -21,6 +22,7 @@ result_path = "results/ensemble_train"
 
 # preprocessing
 df = preprocessing(df, card_df, user_df)
+df = generate_age_feature(df)
 df = add_fraud_one_hot(df)
 df = generate_user_feature(df)
 
@@ -31,7 +33,7 @@ with open(f"{result_path}/ensemble_model.pkl", "rb") as pkl_file:
 # do inference with each model
 result = []
 for i, model in tqdm(enumerate(now_model), desc=f"inference using each model in ensemble"):
-    y_hat = model.inference(df.to_numpy())
+    y_hat = model.inference_proba(df.to_numpy())
     result.append(y_hat)
 
 y_hats_array = np.array(result)
@@ -39,7 +41,7 @@ y_hats_array = np.array(result)
 # get mean of data
 mean_y_hat = np.mean(y_hats_array, axis=0)
 
-thresholds = np.arange(0.1, 1.0, 0.1)
+thresholds = np.arange(0.1, 1.0, 0.05)
 f1_scores = []
 recalls = []
 precisions = []

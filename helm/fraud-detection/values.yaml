@@ -1,6 +1,6 @@
 namespace: default
 frontend:
-  image: konglsh96/rain-forecast-mlops:front
+  image: konglsh96/fraud-detection:front
   resources:
     limits:
       cpu: 100m
@@ -12,12 +12,9 @@ frontend:
     ip: 192.168.49.2
     port: 31233
 backend:
-  image: konglsh96/rain-forecast-mlops:back
+  image: konglsh96/fraud-detection:back
   ip: 192.168.49.2
   port: 30012
-  train:
-    cpu: 1
-    memory: 1Gi
   resources:
     limits:
       cpu: 100m

@@ -24,7 +24,7 @@ class CustomLightGBMClassifier:
         return self.model.predict(X)
 
     def predict_proba(self, X):
-        return self.model.predict_proba(X)
+        return self.model.predict_proba(X)[:, 1]
 
     def feature_importance(self):
         fi_sum = np.sum(self.model.feature_importances_)

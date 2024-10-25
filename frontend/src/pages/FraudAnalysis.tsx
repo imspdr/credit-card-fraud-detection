@@ -44,10 +44,9 @@ function FraudAnalysis() {
               height: 100px;
               border-radius: 20px;
               overflow: auto;
-              padding: 20px;
+              padding: 10px 20px;
               font-size: 20px;
               color: #000000;
-              border-radius: 20px;
               display: flex;
               align-items: center;
               justify-content: center;
