@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fraud-detection-front
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: fraud-detection-front
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: {{ .Values.frontend.service.port }}
+  type: NodePort
+  externalIPs:
+    - {{ .Values.frontend.service.ip }}

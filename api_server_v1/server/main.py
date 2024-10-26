@@ -5,12 +5,35 @@ from sqlalchemy.orm import Session
 from models import *
 from db import *
 from contextlib import asynccontextmanager
+import logging
+import json
+import pandas as pd
+import numpy as np
+import pickle
+
+from model.feature_engineering.preprocess_user_card import preprocess_user, preprocess_card
+from model.feature_engineering.generate_user_feature import generate_user_feature
+from model.feature_engineering.preprocessing import preprocessing
+from model.feature_engineering.generate_age_feature import generate_age_feature
+from model.feature_engineering.add_fraud_one_hot import add_fraud_one_hot
 import pytz
 import os
-import pandas as pd
+
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, np.bool_):
+            return bool(obj)
+        else:
+            return super(NpEncoder, self).default(obj)
 
 kst = pytz.timezone('Asia/Seoul')
-
 
 Base.metadata.create_all(bind=engine)
 
@@ -48,6 +71,9 @@ HEADERS = {
 }
 TRANSACTION_KEYS = ["User", "Card", "Time", "Amount", "Use Chip", "Merchant Name", "Merchant City", "Merchant State","Zip", "MCC"]
 
+with open("ensemble_model.pkl", "rb") as pkl_file:
+    models = pickle.load(pkl_file)
+
 @app.post("/inference")
 async def inference_api(request_data: List[Dict[str, Any]], db: Session = Depends(get_db)):
     try:
@@ -80,9 +106,35 @@ async def inference_api(request_data: List[Dict[str, Any]], db: Session = Depend
             "card": card_info_list,
             "transaction": request_data
         }
-        async with httpx.AsyncClient() as client:
-            response = await client.post(EXTERNAL_URL, json=payload, headers=HEADERS)
-        return response.json()
+
+        logging.info("[predictor] start serving")
+        df = pd.DataFrame(payload["transaction"])
+        user_df = preprocess_user(pd.DataFrame(payload["user"]))
+        card_df = preprocess_card(pd.DataFrame(payload["card"]))
+
+        logging.info(f"[predictor] successfully read request data length : {len(df)}")
+        df = preprocessing(df, card_df, user_df)
+        df = generate_age_feature(df)
+        df = add_fraud_one_hot(df)
+        df = generate_user_feature(df)
+
+        logging.info("[predictor] successfully done feature engineering")
+        result = []
+
+        logging.info("[predictor] start prediction")
+        for i, model in enumerate(models):
+            y_hat = model.inference_proba(df.to_numpy())
+            result.append(y_hat)
+
+        logging.info("[predictor] prediction done")
+        y_hats_array = np.array(result)
+        mean_y_hat = np.mean(y_hats_array, axis=0)
+
+        result = {
+            "predictions": mean_y_hat,
+        }
+        json_result = json.dumps(obj=result, cls=NpEncoder, indent=4, ensure_ascii=False)
+        return json.loads(json_result)
 
     except httpx.HTTPStatusError as exc:
         raise HTTPException(status_code=exc.response.status_code, detail=exc.response.text)
@@ -113,7 +165,7 @@ def load_user_to_db():
     global user_mapper
     session = SessionLocal()
     try:
-        df = pd.read_csv("./sd254_users_with_id.csv")
+        df = pd.read_csv("sd254_users_with_id.csv")
         old_columns = df.columns
         df.columns = df.columns.str.strip().str.replace(' ', '_').str.replace('-', '1').str.lower()
 
@@ -136,7 +188,7 @@ def load_card_to_db():
     global card_mapper
     session = SessionLocal()
     try:
-        df = pd.read_csv("./sd254_cards.csv")
+        df = pd.read_csv("sd254_cards.csv")
         old_columns = df.columns
         df.columns = df.columns.str.strip().str.replace(' ', '_').str.lower()
         for i, col in enumerate(old_columns):

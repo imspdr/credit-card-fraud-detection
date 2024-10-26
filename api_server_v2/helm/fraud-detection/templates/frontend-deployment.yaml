@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fraud-detection-front-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fraud-detection-front
+  template:
+    metadata:
+      labels:
+        app: fraud-detection-front
+    spec:
+      containers:
+        - name: fraud-detection-front
+          image: {{ .Values.frontend.image }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: {{ .Values.frontend.resources.limits.cpu }}
+              memory: {{ .Values.frontend.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.frontend.resources.requests.cpu }}
+              memory: {{ .Values.frontend.resources.requests.memory }}
+          env:
+            - name: NAMESPACE
+              value: "{{ .Values.namespace }}"
+            - name: BACKEND_IP
+              value: "{{ .Values.backend.ip }}"
+            - name: BACKEND_PORT
+              value: "{{ .Values.backend.port }}"
+            - name: uri
+              value: "$uri"

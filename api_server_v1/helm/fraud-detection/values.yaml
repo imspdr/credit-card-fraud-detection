@@ -1,0 +1,40 @@
+namespace: default
+frontend:
+  image: konglsh96/fraud-detection:front
+  resources:
+    limits:
+      cpu: 100m
+      memory: 100Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  service:
+    ip: 192.168.49.2
+    port: 31233
+backend:
+  image: konglsh96/fraud-detection:back
+  ip: 192.168.49.2
+  port: 30012
+  resources:
+    limits:
+      cpu: 100m
+      memory: 100Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+istio:
+  ip: 192.168.49.2
+  port: 31397
+mysql:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 500Mi
+  ip: 192.168.49.2
+  port: 30006
+  user: root
+  password: root
+  db: fraud
