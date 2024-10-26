@@ -25,8 +25,6 @@ def user_analysis(fraud, not_fraud):
 
     return time_data
 
-fraud_df = pd.read_csv("../data/processed/fraud_cases.csv")
-not_fraud_chunks = []
 train_file = "../data/processed/train_transactions.csv"
 result_path = "results/peruser"
 chunk_size = 100000
