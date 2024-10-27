@@ -17,11 +17,11 @@ backend:
   port: 30012
   resources:
     limits:
-      cpu: 100m
-      memory: 500Mi
+      cpu: 500m
+      memory: 1Gi
     requests:
-      cpu: 100m
-      memory: 500Mi
+      cpu: 500m
+      memory: 1Gi
 istio:
   ip: 192.168.49.2
   port: 31397
