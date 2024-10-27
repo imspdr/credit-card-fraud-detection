@@ -7,6 +7,7 @@ ADD sd254_users_with_id.csv /root
 ADD requirements.txt /root
 RUN pip install -r requirements.txt
 
+ADD model /root
 ADD ensemble_model.pkl /root
 ADD db.py /root
 ADD models.py /root
