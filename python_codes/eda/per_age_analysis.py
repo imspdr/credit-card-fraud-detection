@@ -57,7 +57,7 @@ for group, value_dict in count_per_group.items():
             group_top10.pop(0)
     result.append({
         "group": group,
-        "top3": group_top10
+        "top10": group_top10
     })
 
 with open(f"{result_path}/result.json", "w") as f:

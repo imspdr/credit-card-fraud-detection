@@ -18,19 +18,19 @@ export default function CategoricalChart(props: {
       <ResponsiveBar
         layout="vertical"
         margin={{ top: 20, right: 30, bottom: 30, left: 30 }}
-        data={props.dist.value_percentage
+        data={props.dist.value_count
           .sort((a, b) => {
-            if (props.dist.value_percentage.length > 30) {
+            if (props.dist.value_count.length > 10) {
               return b.value - a.value;
             } else {
               return a.name.localeCompare(b.name, undefined, { numeric: true });
             }
           })
-          .filter((_, i) => i < 30)
+          .filter((_, i) => i < 10)
           .map((item: Base) => {
             return {
               name: item.name,
-              value: Number(item.value.toFixed(2)),
+              value: item.value,
             };
           })}
         indexBy="name"
@@ -49,7 +49,7 @@ export default function CategoricalChart(props: {
           modifiers: [["darker", 1.4]],
         }}
         isInteractive={true}
-        label={(d) => `${d.value}%`}
+        label={(d) => `${d.value}`}
         labelSkipWidth={12}
         labelSkipHeight={12}
         borderWidth={1}

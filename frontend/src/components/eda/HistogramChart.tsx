@@ -59,7 +59,7 @@ export default function HistogramChart(props: {
           {`Max : ${props.dist.minmax.max.toFixed(4)}`}
         </text>
         <text x={50} y={40} fill="#202020" fontSize={12}>
-          {`Mean : ${props.dist.minmax.mean.toFixed(4)}`}
+          {`Mean : ${(props.dist.minmax.sum / props.dist.minmax.len).toFixed(4)}`}
         </text>
         <text x={50} y={60} fill="#202020" fontSize={12}>
           {`Min : ${props.dist.minmax.min.toFixed(4)}`}

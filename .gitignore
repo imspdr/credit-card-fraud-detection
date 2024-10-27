@@ -11,7 +11,6 @@ frontend/build/
 frontend/package-lock.json
 python_codes/data/given/*.csv
 python_codes/data/processed/*.csv
-python_codes/eda/results/
 python_codes/make_model/results/*
 !.gitkeep
 **/trained_model.pkl

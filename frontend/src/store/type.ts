@@ -39,7 +39,8 @@ export type NumericDist = {
   minmax: {
     min: number;
     max: number;
-    mean: number;
+    sum: number;
+    len: number;
   };
   histogram: {
     counts: number[];
@@ -48,7 +49,7 @@ export type NumericDist = {
 };
 
 export type CategoricalDist = {
-  value_percentage: Base[];
+  value_count: Base[];
 };
 
 export type Base = {
