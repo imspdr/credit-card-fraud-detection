@@ -299,8 +299,6 @@ inference service를 별도로 정의할 경우, 배포 환경에서 메모리�
 
 ![simplepredict (2).png](<res/simplepredict_(2).png>)
 
-개발한 api-server v1은 배포하여 [http://101.101.216.237:31233/](http://101.101.216.237:31233/) 에서 테스트할 수 있습니다.
-
 EDA 차트 확인
 
 ![Screenshot from 2024-10-28 01-54-58.png](res/Screenshot_from_2024-10-28_01-54-58.png)
