@@ -40,8 +40,6 @@ API 서버 : api_server_v1, api_server_v2 각각 server/requirements.txt 설치
 
 +) front: react typescript, db: mysql
 
-파일 용량을 생각하여 데이터 파일 및 처리과정에서 생성되는 데이터 파일은 제출하지 않았습니다.
-
 credit_card_transactions-ibm_v2.csv
 sd254_cards.csv
 sd254_users.csv
