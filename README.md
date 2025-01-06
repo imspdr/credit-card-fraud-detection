@@ -1,4 +1,8 @@
-# Credit Card Transaction Fraud Detection 모델 개발 (+ 추론 API)
+# Description
+
+Credit Card Transaction Fraud Detection 모델 개발 (+ 추론 API)
+
+kaggle 데이터 (https://www.kaggle.com/datasets/ealtman2019/credit-card-transactions) 를 이용한 이상 거래 탐지 모델 개발 및 API 서버 개발
 
 # 순서
 
